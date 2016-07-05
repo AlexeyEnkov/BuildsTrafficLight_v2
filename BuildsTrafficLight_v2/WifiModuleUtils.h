@@ -14,7 +14,7 @@
 
 #define ESP_RECEIVE_RESPONCE_TIMEOUT   1500L
 #define ESP_RESET_TIMEOUT     5000L
-#define ESP_CONNECT_AP_TIMEOUT  10000L
+#define ESP_CONNECT_WIFI_TIMEOUT  15000L
 
 class WifiModuleUtils
 {
@@ -26,12 +26,14 @@ public:
 	void printAvailableAPs();
 
 	boolean reset();
+	
+	boolean connectWifi();
+	void loadSettings();
 
-	void sendCommand(const String& command);
-	void runScript(String& scriptName);
+	void sendCommand(const String command);
+	void runScript(String scriptName);
 
-	boolean readResponce(String& resp, int timeOut = ESP_RECEIVE_RESPONCE_TIMEOUT);
-	byte convertModuleRespToRespCode(String& resp);
+	String readResponce(int timeOut = ESP_RECEIVE_RESPONCE_TIMEOUT);
 	void clearInputBuffer(int timeout = 100);
 private:
 	Stream* moduleStream = &Serial1;

@@ -42,12 +42,11 @@ void setup() {
 	Timer1.start();
 
 	SystemConfig.initFromEEPROM();// init system settings stored in eeprom
+	WifiUtils.loadSettings();
 
-	//SoundManager.playInitSound();
+	SoundManager.playInitSound();
 	// todo load settings from memory to module
-	//WifiUtils.reset();
-	//delay(1000);
-	//WifiUtils.connectToAP();
+	WifiUtils.reset();
 }
 
 boolean isSetupMode = false;
@@ -70,7 +69,7 @@ void routineProcess()
 	{
 		if (isSetupMode != true)
 		{
-			system.lighting(); // light inly if not setup mode
+			system.lighting(); // light only if not setup mode
 							   // system.checkAliveOfSystem();  TODO: maybe need to delete this method
 		}
 		counterTicksForLight = 0;
@@ -86,19 +85,25 @@ void loop() {
 		SystemUtils.printFreeMemory();
 	}
 
-	if (Serial.available() > 0)
-	{
-		isSetupMode = true;
-	}
-
-	if (isSetupMode == true)
-	{
-		SystemMenuClass* smc = new SystemMenuClass();
-		smc->processMenu();
-		isSetupMode = false;
-		delete smc;
-	}
-
 	// process current state of system (main process)
 	system.process();
+
+	long del = system.getDelayAfterProcess();
+	while (del-- > 0)
+	{
+		if (Serial.available() > 0)
+		{
+			isSetupMode = true;
+		}
+
+		if (isSetupMode == true)
+		{
+			SystemMenuClass* smc = new SystemMenuClass();
+			smc->processMenu();
+			isSetupMode = false;
+			delete smc;
+		}
+
+		delay(1);
+	}
 }

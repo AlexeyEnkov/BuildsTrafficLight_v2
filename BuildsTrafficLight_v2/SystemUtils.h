@@ -15,24 +15,9 @@
 #define str(s) #s
 
 //define error codes
-#define NO_ERRORS 1
 
-#define CONN_NOT_CLOSED_ERROR 11
-#define NOT_CONNECTED_ERROR 13
-#define ALREADY_CONNECTED_ERROR 14
-#define GET_REQUEST_NOT_PREPARED_ERROR 15
-#define GET_NOT_PERFORMED_ERROR 16
 
-#define WIFI_MODULE_NOT_WORK_ERROR 21
-#define WIFI_CONNECTION_ERROR 22
-#define WIFI_AP_NOT_AVAILABLE 23
-
-#define READ_CONFIG_IDS_ERROR 31
-
-#define READ_STATE_OF_ID_ERROR 41
-
-#define TIME_OUT_ERROR 51
-#define CONNECTION_TIME_OUT 10000 // 10 sec
+#define MS_BETWEEN_UP_IDS 5*60*1000 // 5min
 
 #define RED_PIN 11
 #define YELLOW_PIN 10
@@ -54,8 +39,11 @@ public:
 
 	int freeRam();
 
-	void printError(byte error);
+	void printError(String err);
 	void printFreeMemory();
+	boolean isTimeForUpdateIds();
+private:
+	unsigned long timeForUpdateIds = 0;
 };
 
 static SystemUtils_ SystemUtils;

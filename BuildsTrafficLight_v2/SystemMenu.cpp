@@ -7,7 +7,6 @@
 SystemMenuClass::SystemMenuClass()
 {
 	this->exitCmd = F("exit");
-	this->apListCmd = F("ap_ls");
 	this->wifiCmd = F("wifi ");
 	this->hostCmd = F("host ");
 	this->soundCmd = F("sound ");
@@ -33,18 +32,16 @@ void SystemMenuClass::processMenu()
 		{
 			Serial.println(input);
 
-			if (input.startsWith(apListCmd))
-			{
-				WifiUtils.printAvailableAPs();
-			}
 			if (input.startsWith(wifiCmd))
 			{
 				setWifiParams(input);
-				//todo implement WifiUtils.connectToAP() == true ? Serial.println(F("conn")) : Serial.println(F("err"));
+				WifiUtils.loadSettings();
+				WifiUtils.connectWifi() == true ? Serial.println(F("conn")) : Serial.println(F("err"));
 			}
 			if (input.startsWith(hostCmd))
 			{
 				setHostParams(input);
+				WifiUtils.loadSettings();
 			}
 			if (input.startsWith(soundCmd))
 			{
@@ -70,7 +67,6 @@ void SystemMenuClass::showMenu()
 {
 	Serial.println(F("\n---Setup Menu---"));
 	Serial.println(F("exit|\tcancel"));
-	Serial.println(F("ap_ls|\tlist of APs"));
 
 	char curLabel[] = "|\tcur: ";
 

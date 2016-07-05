@@ -10,7 +10,7 @@ int SystemUtils_::freeRam() {
 	return (int)&v - (__brkval == 0 ? (int)&__heap_start : (int)__brkval);
 }
 
-void SystemUtils_::printError(byte error)
+void SystemUtils_::printError(String error)
 {
 	Serial.print(F("error: ")); Serial.println(error);
 }
@@ -18,4 +18,14 @@ void SystemUtils_::printError(byte error)
 void SystemUtils_::printFreeMemory()
 {
 	Serial.print(F("free ram: ")); Serial.println(freeRam());
+}
+
+boolean SystemUtils_::isTimeForUpdateIds()
+{
+	if (timeForUpdateIds < millis())
+	{
+		timeForUpdateIds = millis() + MS_BETWEEN_UP_IDS;
+		return true;
+	}
+	return false;
 }

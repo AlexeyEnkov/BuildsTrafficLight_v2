@@ -28,10 +28,6 @@ protected:
 	
 	BasicLightStrategy* lightStrategy = 0;
 	SystemState* nextState = 0;
-
-	byte MAX_REPEATS = 0;
-	byte countOfRepeats = 0;
-
 };
 #endif
 

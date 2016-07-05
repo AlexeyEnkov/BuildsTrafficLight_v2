@@ -14,5 +14,8 @@ ResetModuleState::~ResetModuleState() {
 void ResetModuleState::process() {
 	Serial.println(F("---ResetModuleState---"));
 
-	WifiUtils.reset();
+	if (!WifiUtils.reset())
+	{
+		SystemUtils.printError(F("RESET"));
+	}
 }

@@ -17,26 +17,45 @@ boolean WifiModuleUtils::reset()
 	delay(100);
 	digitalWrite(MODULE_RESET_PIN, HIGH);
 	delay(1000);
-	WifiUtils.clearInputBuffer(1000); // read resp from module
+	return String("OK").equals(readResponce(ESP_RESET_TIMEOUT));
 }
 
-void WifiModuleUtils::sendCommand(const String & command)
+boolean WifiModuleUtils::connectWifi()
+{
+	runScript(F("wifi_con.lua"));
+	return String("OK").equals(readResponce(ESP_CONNECT_WIFI_TIMEOUT));
+}
+
+void WifiModuleUtils::loadSettings()
+{
+	moduleStream->print(F("require(\"upd_cfg\")(\""));
+	moduleStream->print(SystemConfig.getWifiParams().ssid);
+	moduleStream->print(F("\",\""));
+	moduleStream->print(SystemConfig.getWifiParams().pass);
+	moduleStream->print(F("\",\""));
+	moduleStream->print(SystemConfig.getBuildServerParams().ip);
+	moduleStream->print(F("\",\""));
+	moduleStream->print(SystemConfig.getBuildServerParams().port);
+	moduleStream->println(F("\")"));
+}
+
+void WifiModuleUtils::sendCommand(const String command)
 {
 	clearInputBuffer();
-	moduleStream->print(command);
+	moduleStream->println(command);
 }
 
-void WifiModuleUtils::runScript(String & scriptName)
+void WifiModuleUtils::runScript(String scriptName)
 {
 	clearInputBuffer();
-	moduleStream->print(F("dofile(\"")); moduleStream->print(scriptName); moduleStream->println("\")");
+	moduleStream->print(F("dofile(\"")); moduleStream->print(scriptName); moduleStream->println(F("\")"));
 }
 
-boolean WifiModuleUtils::readResponce(String & resp, int timeOut)
+String WifiModuleUtils::readResponce(int timeOut)
 {
+	String resp;
 	moduleStream->setTimeout(timeOut);
-	boolean res = moduleStream->find("$");
-	if (res)
+	if (moduleStream->find("$"))
 	{
 		char c;
 		int nextTimeout = 200;
@@ -50,14 +69,8 @@ boolean WifiModuleUtils::readResponce(String & resp, int timeOut)
 			delay(1);
 		}
 		resp.trim();
-		res = true;
 	}
-	return res;
-}
-
-byte WifiModuleUtils::convertModuleRespToRespCode(String & resp)
-{
-	return byte();
+	return resp;
 }
 
 void WifiModuleUtils::clearInputBuffer(int timeout)

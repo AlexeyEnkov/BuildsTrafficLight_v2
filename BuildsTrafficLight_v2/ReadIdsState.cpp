@@ -6,39 +6,27 @@
 #include "ReadDataOfIdsState.h"
 #include "TestConnectToWifiState.h"
 
-ReadIdsState::ReadIdsState() {
-	MAX_REPEATS = 1;
-}
+ReadIdsState::ReadIdsState() {}
 
 ReadIdsState::~ReadIdsState()
 {}
 
 // read ids to eeprom 
 void ReadIdsState::process() {
+	nextState = new ReadDataOfIdsState();
 
+	if (!SystemUtils.isTimeForUpdateIds())
+	{
+		return;
+	}
 	Serial.println(F("---ReadIdsState---"));
 
-	WifiUtils.clearInputBuffer();
-	Serial1.println("dofile(\"upd_ids.lua\")");
-	String resp;
-	boolean isGetResp = WifiUtils.readResponce(resp, 15000);
-	// todo fin resp
-	// todo update if need one in 5 minutes ?
-	// todo resp status from module
-	//byte respStatus = NO_ERRORS;
+	WifiUtils.runScript("upd_ids.lua");
+	String resp = WifiUtils.readResponce(15000);
 
-	if (isGetResp && resp.equalsIgnoreCase("OK")) {
-		nextState = new ReadDataOfIdsState();
-	}
-	else {
-		//SystemUtils.printError(respStatus);
-
-		if (countOfRepeats < MAX_REPEATS) {
-			countOfRepeats++;
-		}
-		else {
-			nextState = new TestConnectToWiFiState();
-		}
+	if (!resp.equalsIgnoreCase("OK")) {
+		SystemUtils.printError(resp);
+		nextState = new TestConnectToWiFiState();
 	}
 }
 

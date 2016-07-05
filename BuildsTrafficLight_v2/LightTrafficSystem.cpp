@@ -29,35 +29,23 @@ void LightTrafficSystem::updateLightStrategy() {
 	}
 }
 
+long LightTrafficSystem::getDelayAfterProcess()
+{
+	return delayAfterProc;
+}
+
 void LightTrafficSystem::process() {
 	currentState->process();
 
+	delayAfterProc = currentState->getDelayAfterProcessState();
+
 	updateLightStrategy();
 
-	delay(currentState->getDelayAfterProcessState());
-
 	setCurrentState();
-
-	counterForBusyTime = 0; // system is alive
 }
 
 void LightTrafficSystem::lighting() {
 	if (currentLightStrategy != 0) {
 		currentLightStrategy->lighting(); // perform one in 1/10sec
-	}
-}
-
-void LightTrafficSystem::checkAliveOfSystem() {
-	if (counterForBusyTime < MAX_BUSY_TIME) {
-		counterForBusyTime++;
-	}
-	else { 
-		// system is stoped
-		Serial.print(F("restart sys")); SystemUtils.printFreeMemory();
-		if (currentState != 0) {
-			delete currentState;
-		}
-		currentState = new ReadIdsState(); // go read ids
-		counterForBusyTime = 0;
 	}
 }

@@ -1,4 +1,4 @@
-file.open("bId")
+file.open("ids")
 local busy = false
 B_FAIL="FAIL"
 B_SUCC="SUCC"
@@ -43,7 +43,7 @@ else
     _G["lastStat"]=status
     local sender = require("send_resp")
     sender(reqSt)
-    if reqSt="OK" then sender(status) end
+    if reqSt=="OK" then sender(status) end
     file.close()
     tmr.unregister(1)
 end 

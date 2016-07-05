@@ -7,7 +7,7 @@ if (code ~= 200) then if(code<0) then st="C_ERR" else st="R_ERR" end
 else
   ok, json = pcall(cjson.decode, data)
   if ok then
-     file.open("bId", "r")
+     file.open("ids", "r")
      isNew = false;
      for k,v in pairs(json.buildType) do 
         fL = file.readline()
@@ -19,7 +19,7 @@ else
      if not isNew then isNew = file.readline() ~= nil end
      file.close()
      if(isNew) then
-         file.open("bId", "w")
+         file.open("ids", "w")
          for k,v in pairs(json.buildType) do 
             fLine = file.writeline(v.id)
          end

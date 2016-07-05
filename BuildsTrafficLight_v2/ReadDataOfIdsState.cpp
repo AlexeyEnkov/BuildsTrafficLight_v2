@@ -10,9 +10,7 @@
 #include "TestConnectToWifiState.h"
 
 
-ReadDataOfIdsState::ReadDataOfIdsState() {
-	MAX_REPEATS = 2;
-}
+ReadDataOfIdsState::ReadDataOfIdsState() {}
 
 ReadDataOfIdsState::~ReadDataOfIdsState() {
 
@@ -21,29 +19,22 @@ ReadDataOfIdsState::~ReadDataOfIdsState() {
 void ReadDataOfIdsState::process() {
 	Serial.println(F("---ReadDataOfIdsState---"));
 
-	STATE_OF_BUILDS = SUCCESS;
-
-	WifiUtils.clearInputBuffer();
-	Serial1.println("dofile(\"get_stat.lua\")");
-	String resp;
-	boolean isGetOKResp = WifiUtils.readResponce(resp, 10000) && resp.equalsIgnoreCase("OK"); 
-	
+	WifiUtils.runScript(F("get_stat.lua"));
 	// choose next state
-	if (isGetOKResp) {
-		resp = "";
-		WifiUtils.readResponce(resp);
-		Serial.println(resp);
+	String resp = WifiUtils.readResponce(15000);
+	if (resp.equalsIgnoreCase("OK")) {
+		String stat = WifiUtils.readResponce();
 
 		delayMs = 5000; // msec if all good
 		nextState = new ReadIdsState();
 
 		// change light strategy
-		if (resp.equalsIgnoreCase(F("FAIL")))
+		if (stat.equalsIgnoreCase(F("FAIL")))
 		{
 			lightStrategy = new BuildsFailedLightStrategy();
 			SoundManager.playBadSound();
 		}
-		else if (resp.equalsIgnoreCase(F("RUN")))
+		else if (stat.equalsIgnoreCase(F("RUN")))
 		{
 			lightStrategy = new BuildsFailedAndRunningLightStrategy();
 			SoundManager.clearPrevPlayedSoundType();
@@ -55,13 +46,8 @@ void ReadDataOfIdsState::process() {
 		}
 	}
 	else {
-		//SystemUtils.printError(respStatus);
+		SystemUtils.printError(resp);
 
-		if (countOfRepeats < MAX_REPEATS) {
-			countOfRepeats++;
-		}
-		else {
-			nextState = new TestConnectToWiFiState(); 
-		}
+		nextState = new TestConnectToWiFiState(); 
 	}
 }
