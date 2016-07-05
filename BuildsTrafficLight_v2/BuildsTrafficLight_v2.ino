@@ -43,12 +43,11 @@ void setup() {
 
 	SystemConfig.initFromEEPROM();// init system settings stored in eeprom
 
-	SoundManager.playInitSound();
-
-	WifiUtils.reset();
-	delay(1000);
-	WifiUtils.connectToAP();
-
+	//SoundManager.playInitSound();
+	// todo load settings from memory to module
+	//WifiUtils.reset();
+	//delay(1000);
+	//WifiUtils.connectToAP();
 }
 
 boolean isSetupMode = false;
@@ -64,7 +63,6 @@ void routineProcess()
 		processLock = true; // lock this process for prevent dublicate performing (it can executes long time)
 		SoundManager.performPlayAction();
 		counter = 0;
-		SystemUtils.printFreeMemory();
 		processLock = false;
 	}
 

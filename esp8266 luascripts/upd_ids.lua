@@ -2,8 +2,8 @@ http.get(
 "http://".._G["ip"]..":".._G["port"].."/guestAuth/app/rest/buildTypes",
 "Accept: application/json\r\n",
 function(code, data)
-if (code ~= 200) then
-  print("C_ERR")
+local st="OK"
+if (code ~= 200) then if(code<0) then st="C_ERR" else st="R_ERR" end
 else
   ok, json = pcall(cjson.decode, data)
   if ok then
@@ -25,9 +25,9 @@ else
          end
          file.close()
      end
-     print("OK")
   else
-     print("P_ERR")
+     st="P_ERR"
   end
 end
+require("send_resp")(st)
 end)

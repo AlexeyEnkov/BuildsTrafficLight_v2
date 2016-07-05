@@ -4,22 +4,22 @@
 
 #include "BuildServerCheckingState.h"
 #include "ResetModuleState.h"
-#include "ReconnectToWiFiState.h"
+#include "TestConnectToWiFiState.h"
 #include "WiFiConnectionErrorLightStrategy.h"
 
-ReconnectToWiFiState::ReconnectToWiFiState() {
+TestConnectToWiFiState::TestConnectToWiFiState() {
 	MAX_REPEATS = 0;// try to connect if not success -> reset module
 }
 
-ReconnectToWiFiState::~ReconnectToWiFiState()
+TestConnectToWiFiState::~TestConnectToWiFiState()
 {}
 
-void ReconnectToWiFiState::process() {
-	Serial.println(F("---ReconnectToWiFiState---"));
+void TestConnectToWiFiState::process() {
+	Serial.println(F("---TestConnectToWiFiState---"));
 
 	WifiUtils.reset();
 	delay(1000);
-	if (true == WifiUtils.connectToAP()) {
+	if (true /*== WifiUtils.connectToAP()*/) {
 		nextState = new BuildServerCheckingState();
 	}
 	else

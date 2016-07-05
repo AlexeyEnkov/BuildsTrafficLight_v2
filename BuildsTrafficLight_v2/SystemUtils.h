@@ -34,10 +34,6 @@
 #define TIME_OUT_ERROR 51
 #define CONNECTION_TIME_OUT 10000 // 10 sec
 
-#define BUILD_TYPES_URL "/guestAuth/app/rest/buildTypes"
-#define BUILD_STATE_URL "/guestAuth/app/rest/buildTypes/id:#/builds/?locator=count:2,running:any"
-#define ID_PLACEHOLDER "#"
-
 #define RED_PIN 11
 #define YELLOW_PIN 10
 #define GREEN_PIN 9
@@ -57,21 +53,6 @@ public:
 	~SystemUtils_() {};
 
 	int freeRam();
-
-	/*
-	Update in EEPROM IDS of configurations(if data are not changed than write to EEPROM not performed)
-	Start adress contains len of ids
-	Ids separated by 0
-	return addres of end ids
-	*/
-	int updateBuildsIdsInEEPROM(String** ids, byte len);
-	/*
-	Read data from EEPROM from current address to concrete char
-	int address of terminate char
-	*/
-	int readFromEEPROMToString(int startAddress, char stop, String& buffer);
-	
-	const byte START_EEPROM_ADDRESS_BUILD_IDS = 100;
 
 	void printError(byte error);
 	void printFreeMemory();

@@ -20,23 +20,23 @@ void BuildServerCheckingState::process() {
 
 	String request = String(F(xstr(BUILD_TYPES_URL)));
 	byte respStatus = NO_ERRORS;
-	if (WifiUtils.connectTCP())
-	{
-		if (WifiUtils.prepareRequest(request))
-		{
-			WifiUtils.sendRequest(request);
-			WifiUtils.findModuleResp(F("200 OK"), 2000); //todo need to check that this url is not valid
-		}
-		else
-		{
-			respStatus = GET_REQUEST_NOT_PREPARED_ERROR;
-		}
-		WifiUtils.closeTCP();
-	}
-	else
-	{
-		respStatus = NOT_CONNECTED_ERROR;
-	}
+	//if (WifiUtils.connectTCP())
+	//{
+	//	if (WifiUtils.prepareRequest(request))
+	//	{
+	//		WifiUtils.sendCommand(request);
+	//		WifiUtils.findModuleResp(F("200 OK"), 2000); //todo need to check that this url is not valid
+	//	}
+	//	else
+	//	{
+	//		respStatus = GET_REQUEST_NOT_PREPARED_ERROR;
+	//	}
+	//	WifiUtils.closeTCP();
+	//}
+	//else
+	//{
+	//	respStatus = NOT_CONNECTED_ERROR;
+	//}
 
 	if (respStatus == NO_ERRORS) {
 		nextState = new ReadIdsState();

@@ -23,9 +23,6 @@ public:
 
 	void process();
 private:
-
-	byte handleIDStatus();
-
 	byte STATE_OF_BUILDS;
 };
 

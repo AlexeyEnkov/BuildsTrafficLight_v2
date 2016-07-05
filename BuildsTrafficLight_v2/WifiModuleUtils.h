@@ -11,8 +11,6 @@
 
 #include "SystemUtils.h"
 #include "SystemConfig.h"
-#include "JSONDataParser.h"
-#include "DataReader.h"
 
 #define ESP_RECEIVE_RESPONCE_TIMEOUT   1500L
 #define ESP_RESET_TIMEOUT     5000L
@@ -25,19 +23,15 @@ public:
 	WifiModuleUtils(void) {};
 	~WifiModuleUtils() {};
 
-	boolean connectToAP();
-	boolean disconnectAP();
 	void printAvailableAPs();
 
 	boolean reset();
 
-	boolean connectTCP();
-	boolean prepareRequest(String& request);
-	void sendRequest(const String& request);
-	boolean readData(DataReader_* dataReader, JSONDataParser_* dataParser);
-	boolean closeTCP();
+	void sendCommand(const String& command);
+	void runScript(String& scriptName);
 
-	boolean findModuleResp(const String& strForFind, int timeOut = ESP_RECEIVE_RESPONCE_TIMEOUT);
+	boolean readResponce(String& resp, int timeOut = ESP_RECEIVE_RESPONCE_TIMEOUT);
+	byte convertModuleRespToRespCode(String& resp);
 	void clearInputBuffer(int timeout = 100);
 private:
 	Stream* moduleStream = &Serial1;

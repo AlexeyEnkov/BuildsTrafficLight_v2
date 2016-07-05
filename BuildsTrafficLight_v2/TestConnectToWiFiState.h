@@ -1,4 +1,4 @@
-// ReconnectToWiFiState.h
+// TestConnectToWiFiState.h
 
 #ifndef _CONNECTTOWIFISTATE_h
 #define _CONNECTTOWIFISTATE_h
@@ -11,10 +11,10 @@
 
 #include "SystemState.h"
 
-class ReconnectToWiFiState : public SystemState {
+class TestConnectToWiFiState : public SystemState {
 public:
-	ReconnectToWiFiState();
-	~ReconnectToWiFiState();
+	TestConnectToWiFiState();
+	~TestConnectToWiFiState();
 
 	void process();
 

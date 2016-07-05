@@ -40,7 +40,7 @@ void SystemMenuClass::processMenu()
 			if (input.startsWith(wifiCmd))
 			{
 				setWifiParams(input);
-				WifiUtils.connectToAP() == true ? Serial.println(F("conn")) : Serial.println(F("err"));
+				//todo implement WifiUtils.connectToAP() == true ? Serial.println(F("conn")) : Serial.println(F("err"));
 			}
 			if (input.startsWith(hostCmd))
 			{
