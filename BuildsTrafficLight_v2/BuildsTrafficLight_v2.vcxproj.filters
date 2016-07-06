@@ -1,0 +1,177 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\lightstrategies">
+      <UniqueIdentifier>{11e0d6f5-923b-45c9-9cb0-ec94976f2425}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\utils">
+      <UniqueIdentifier>{5835800f-20be-4f6d-bfb9-c68ab00eee73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\lightstrategies">
+      <UniqueIdentifier>{cad183e6-3761-4ce8-9e03-585596d89184}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\utils">
+      <UniqueIdentifier>{0156ad27-3b81-4470-874f-5b36f033f735}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\states">
+      <UniqueIdentifier>{5a5728bd-07a6-4779-bbf6-4df77fbcc431}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\states">
+      <UniqueIdentifier>{2182e6a0-3f00-4710-9f66-4d2cd5e0d452}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BuildsTrafficLight_v2.ino" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="__vm\.BuildsTrafficLight_v2.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemConfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemMenu.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemState.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LightTrafficSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BasicLightStrategy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildServerErrorLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildServerRequestErrorLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildsFailedAndRunningLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildsFailedLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildsSuccessLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
+    </ClInclude>
+    <ClInclude Include="InitSystemLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
+    </ClInclude>
+    <ClInclude Include="WiFiConnectionErrorLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildServerCheckingState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="ResetModuleState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadDataOfIdsState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="TestLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
+    </ClInclude>
+    <ClInclude Include="WifiModuleUtils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadIdsState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemUtils.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="TestConnectToWiFiState.h">
+      <Filter>Header Files\states</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="RtttlPlayer.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SystemMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LightTrafficSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemConfig.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BasicLightStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildServerErrorLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildServerRequestErrorLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildsFailedAndRunningLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildsSuccessLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildsFailedLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="InitSystemLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="WiFiConnectionErrorLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildServerCheckingState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadDataOfIdsState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="ResetModuleState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="TestLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="ReadIdsState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="WifiModuleUtils.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="TestConnectToWiFiState.cpp">
+      <Filter>Source Files\states</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="RtttlPlayer.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
