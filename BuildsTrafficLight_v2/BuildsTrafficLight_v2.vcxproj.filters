@@ -39,12 +39,6 @@
     <ClInclude Include="__vm\.BuildsTrafficLight_v2.vsarduino.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SystemConfig.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SystemMenu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SystemState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -105,15 +99,15 @@
     <ClInclude Include="RtttlPlayer.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
+    <ClInclude Include="SystemConfig.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemConfigHelper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SystemMenu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="LightTrafficSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SystemConfig.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="SystemState.cpp">
@@ -172,6 +166,12 @@
     </ClCompile>
     <ClCompile Include="RtttlPlayer.cpp">
       <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemConfig.cpp">
+      <Filter>Source Files\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemConfigHelper.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 http.get(
-"http://".._G["ip"]..":".._G["port"].."/guestAuth/app/rest/buildTypes",
+"http://".._G["cfg"].ip..":".._G["cfg"].port.."/guestAuth/app/rest/buildTypes",
 "Accept: application/json\r\n",
 function(code, data)
 local st="OK"
@@ -25,6 +25,7 @@ else
          end
          file.close()
      end
+     json=nil
   else
      st="P_ERR"
   end

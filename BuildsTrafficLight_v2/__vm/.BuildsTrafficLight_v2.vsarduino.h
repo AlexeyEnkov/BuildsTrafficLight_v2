@@ -96,8 +96,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <..\BuildsTrafficLight_v2\SoundManager.h>
 #include <..\BuildsTrafficLight_v2\SystemConfig.cpp>
 #include <..\BuildsTrafficLight_v2\SystemConfig.h>
-#include <..\BuildsTrafficLight_v2\SystemMenu.cpp>
-#include <..\BuildsTrafficLight_v2\SystemMenu.h>
+#include <..\BuildsTrafficLight_v2\SystemConfigHelper.cpp>
+#include <..\BuildsTrafficLight_v2\SystemConfigHelper.h>
 #include <..\BuildsTrafficLight_v2\SystemState.cpp>
 #include <..\BuildsTrafficLight_v2\SystemState.h>
 #include <..\BuildsTrafficLight_v2\SystemUtils.cpp>

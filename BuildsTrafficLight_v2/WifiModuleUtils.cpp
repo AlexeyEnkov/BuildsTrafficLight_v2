@@ -4,39 +4,23 @@
 
 #include "WifiModuleUtils.h"
 
-
-void WifiModuleUtils::printAvailableAPs()
-{
-	Serial.println("not impl");
-}
-
 boolean WifiModuleUtils::reset()
 {
 	// hard reset of wifi module
 	digitalWrite(MODULE_RESET_PIN, LOW);
-	delay(100);
+	delay(200);
 	digitalWrite(MODULE_RESET_PIN, HIGH);
 	delay(1000);
+	sendCommand("node.restart()");
+//	Serial.println(moduleStream->readString());
+//	Serial.println(moduleStream->readString());
 	return String("OK").equals(readResponce(ESP_RESET_TIMEOUT));
 }
 
-boolean WifiModuleUtils::connectWifi()
+boolean WifiModuleUtils::testWifi()
 {
-	runScript(F("wifi_con.lua"));
+	runScript(F("test_wifi.lua"));
 	return String("OK").equals(readResponce(ESP_CONNECT_WIFI_TIMEOUT));
-}
-
-void WifiModuleUtils::loadSettings()
-{
-	moduleStream->print(F("require(\"upd_cfg\")(\""));
-	moduleStream->print(SystemConfig.getWifiParams().ssid);
-	moduleStream->print(F("\",\""));
-	moduleStream->print(SystemConfig.getWifiParams().pass);
-	moduleStream->print(F("\",\""));
-	moduleStream->print(SystemConfig.getBuildServerParams().ip);
-	moduleStream->print(F("\",\""));
-	moduleStream->print(SystemConfig.getBuildServerParams().port);
-	moduleStream->println(F("\")"));
 }
 
 void WifiModuleUtils::sendCommand(const String command)

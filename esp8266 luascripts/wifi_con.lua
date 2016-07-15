@@ -1,6 +1,0 @@
-wifi.sta.eventMonReg(wifi.STA_GOTIP, function() require("send_resp")("OK") wifi.sta.eventMonStop(1) end)
-wifi.sta.eventMonReg(wifi.STA_APNOTFOUND, function() require("send_resp")("ERR") wifi.sta.eventMonStop(1) end)
-wifi.sta.eventMonReg(wifi.STA_FAIL, function() require("send_resp")("ERR") wifi.sta.eventMonStop(1) end)
-wifi.sta.eventMonReg(wifi.STA_WRONGPWD, function() require("send_resp")("ERR") wifi.sta.eventMonStop(1) end)
-wifi.sta.eventMonStart()
-wifi.sta.config(_G["ssid"], _G["pass"])

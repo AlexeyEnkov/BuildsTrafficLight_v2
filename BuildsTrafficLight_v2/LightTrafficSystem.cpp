@@ -46,6 +46,6 @@ void LightTrafficSystem::process() {
 
 void LightTrafficSystem::lighting() {
 	if (currentLightStrategy != 0) {
-		currentLightStrategy->lighting(); // perform one in 1/10sec
+		currentLightStrategy->lighting();
 	}
 }

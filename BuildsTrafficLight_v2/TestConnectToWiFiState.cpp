@@ -15,7 +15,7 @@ TestConnectToWiFiState::~TestConnectToWiFiState()
 void TestConnectToWiFiState::process() {
 	Serial.println(F("---TestConnectToWiFiState---"));
 
-	if (WifiUtils.connectWifi()) {
+	if (WifiUtils.testWifi()) {
 		nextState = new BuildServerCheckingState();
 	}
 	else

@@ -1,5 +1,5 @@
 http.get(
-"http://".._G["ip"]..":".._G["port"].."/guestAuth/app/rest/buildTypes",
+"http://".._G["cfg"].ip..":".._G["cfg"].port.."/guestAuth/app/rest/buildTypes",
 nil,
 function(code, data)
 local st

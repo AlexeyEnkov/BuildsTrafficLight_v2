@@ -1,6 +1,6 @@
+#include "SystemConfigHelper.h"
 #include "SoundManager.h"
 #include <EEPROM.h>
-#include "SystemMenu.h"
 #include "RtttlPlayer.h"
 #include "TestLightStrategy.h"
 #include "SystemConfig.h"
@@ -19,12 +19,16 @@ LightTrafficSystem system = LightTrafficSystem(new ReadIdsState(), new InitSyste
 void setup() {
 
 	pinMode(MODULE_RESET_PIN, OUTPUT);
-	digitalWrite(MODULE_RESET_PIN, HIGH);
+	digitalWrite(MODULE_RESET_PIN, LOW);
 
 	long serialSpeed = 115200;
 	Serial.begin(serialSpeed);
 	//while (!Serial) {}
 	Serial1.begin(serialSpeed);
+	while (!Serial1) {}
+	
+	Serial.println(WifiUtils.reset());
+	Serial.println(WifiUtils.testWifi());
 
 	// uncomment for debug module loop
 	/*for (;;) {
@@ -42,40 +46,24 @@ void setup() {
 	Timer1.start();
 
 	SystemConfig.initFromEEPROM();// init system settings stored in eeprom
-	WifiUtils.loadSettings();
+	SystemConfig.updateDebugMode(false); //debug off temporary
 
 	SoundManager.playInitSound();
-	// todo load settings from memory to module
-	WifiUtils.reset();
 }
 
 boolean isSetupMode = false;
 
 long counter = 0;
 long counterTicksForLight = 0;
-volatile boolean processLock = false;
 
 void routineProcess()
 {
-	if (false == processLock && (counter > FAST_TIMER_TICKS_IN_1SEC / MAIN_TIMER_TICKS_IN_1SEC))
+	if (counter > FAST_TIMER_TICKS_IN_1SEC / MAIN_TIMER_TICKS_IN_1SEC)
 	{
-		processLock = true; // lock this process for prevent dublicate performing (it can executes long time)
+		system.lighting();
 		SoundManager.performPlayAction();
 		counter = 0;
-		processLock = false;
 	}
-
-	if (counterTicksForLight > (FAST_TIMER_TICKS_IN_1SEC / MAIN_TIMER_TICKS_IN_1SEC))
-	{
-		if (isSetupMode != true)
-		{
-			system.lighting(); // light only if not setup mode
-							   // system.checkAliveOfSystem();  TODO: maybe need to delete this method
-		}
-		counterTicksForLight = 0;
-	}
-
-	counterTicksForLight++;
 	counter++;
 }
 
@@ -89,21 +77,19 @@ void loop() {
 	system.process();
 
 	long del = system.getDelayAfterProcess();
+	boolean needReadConf = true;
 	while (del-- > 0)
 	{
-		if (Serial.available() > 0)
+		if (needReadConf)
 		{
-			isSetupMode = true;
+			WifiUtils.runScript("get_conf.lua");
+			String resp = WifiUtils.readResponce();
+			if (resp.length() > 0)
+			{
+				SystemConfigHelper.handleCfg(resp);
+			}
+			needReadConf = false;
 		}
-
-		if (isSetupMode == true)
-		{
-			SystemMenuClass* smc = new SystemMenuClass();
-			smc->processMenu();
-			isSetupMode = false;
-			delete smc;
-		}
-
 		delay(1);
 	}
 }

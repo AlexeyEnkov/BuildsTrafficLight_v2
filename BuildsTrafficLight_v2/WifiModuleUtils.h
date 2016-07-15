@@ -13,7 +13,7 @@
 #include "SystemConfig.h"
 
 #define ESP_RECEIVE_RESPONCE_TIMEOUT   1500L
-#define ESP_RESET_TIMEOUT     5000L
+#define ESP_RESET_TIMEOUT     2000L
 #define ESP_CONNECT_WIFI_TIMEOUT  15000L
 
 class WifiModuleUtils
@@ -23,12 +23,9 @@ public:
 	WifiModuleUtils(void) {};
 	~WifiModuleUtils() {};
 
-	void printAvailableAPs();
-
 	boolean reset();
 	
-	boolean connectWifi();
-	void loadSettings();
+	boolean testWifi();
 
 	void sendCommand(const String command);
 	void runScript(String scriptName);

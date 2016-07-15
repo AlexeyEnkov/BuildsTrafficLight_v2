@@ -17,7 +17,7 @@ BuildServerCheckingState::~BuildServerCheckingState()
 void BuildServerCheckingState::process() {
 	Serial.println(F("---BuildServerCheckingState---"));
 
-	WifiUtils.runScript(F("test_server.lua"));
+	WifiUtils.runScript(F("test_build_srv.lua"));
 	String resp = WifiUtils.readResponce(15000);
 
 	if (resp.equals("OK")) {
