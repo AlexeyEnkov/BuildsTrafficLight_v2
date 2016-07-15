@@ -15,14 +15,14 @@ TestConnectToWiFiState::~TestConnectToWiFiState()
 void TestConnectToWiFiState::process() {
 	Serial.println(F("---TestConnectToWiFiState---"));
 
-	if (WifiUtils.testWifi()) {
+	if (WifiUtils.testWifi(false)) {
 		nextState = new BuildServerCheckingState();
 	}
 	else
 	{
 		SystemUtils.printError(F("WIFI"));
 		lightStrategy = new WiFiConnectionErrorLightStrategy();
-		delayMs = 1000;
+		delayMs = 10000;
 		nextState = new ResetModuleState();
 	}
 }

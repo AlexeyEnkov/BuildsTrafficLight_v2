@@ -27,6 +27,7 @@ void ReadIdsState::process() {
 	if (!resp.equalsIgnoreCase("OK")) {
 		SystemUtils.printError(resp);
 		nextState = new TestConnectToWiFiState();
+		delayMs = 5000;
 	}
 }
 

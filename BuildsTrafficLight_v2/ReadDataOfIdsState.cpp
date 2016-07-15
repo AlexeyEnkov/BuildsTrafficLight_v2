@@ -49,5 +49,6 @@ void ReadDataOfIdsState::process() {
 		SystemUtils.printError(resp);
 
 		nextState = new TestConnectToWiFiState(); 
+		delayMs = 8000;
 	}
 }

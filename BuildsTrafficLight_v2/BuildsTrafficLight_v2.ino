@@ -20,6 +20,7 @@ void setup() {
 
 	pinMode(MODULE_RESET_PIN, OUTPUT);
 	digitalWrite(MODULE_RESET_PIN, LOW);
+	digitalWrite(MODULE_RESET_PIN, HIGH);
 
 	long serialSpeed = 115200;
 	Serial.begin(serialSpeed);
@@ -27,9 +28,6 @@ void setup() {
 	Serial1.begin(serialSpeed);
 	while (!Serial1) {}
 	
-	Serial.println(WifiUtils.reset());
-	Serial.println(WifiUtils.testWifi());
-
 	// uncomment for debug module loop
 	/*for (;;) {
 	if (Serial.available())  Serial1.write(Serial.read());
@@ -49,6 +47,9 @@ void setup() {
 	SystemConfig.updateDebugMode(false); //debug off temporary
 
 	SoundManager.playInitSound();
+	
+	Serial.println(WifiUtils.reset());
+	Serial.println(WifiUtils.testWifi(true));
 }
 
 boolean isSetupMode = false;

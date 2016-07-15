@@ -17,9 +17,17 @@ boolean WifiModuleUtils::reset()
 	return String("OK").equals(readResponce(ESP_RESET_TIMEOUT));
 }
 
-boolean WifiModuleUtils::testWifi()
+boolean WifiModuleUtils::testWifi(boolean reconnect)
 {
-	runScript(F("test_wifi.lua"));
+	if (reconnect)
+	{
+		runScript(F("test_wifi.lua"));
+	}
+	else
+	{
+		sendCommand("print((wifi.sta.getip() and '$OK' or '$ERR'))");
+	}
+	
 	return String("OK").equals(readResponce(ESP_CONNECT_WIFI_TIMEOUT));
 }
 

@@ -25,7 +25,7 @@ public:
 
 	boolean reset();
 	
-	boolean testWifi();
+	boolean testWifi(boolean reconnect);
 
 	void sendCommand(const String command);
 	void runScript(String scriptName);

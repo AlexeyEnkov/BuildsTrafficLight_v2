@@ -17,7 +17,7 @@
 //define error codes
 
 
-#define MS_BETWEEN_UP_IDS 1200000L // 2min
+#define MS_BETWEEN_UP_IDS 30000L // 
 
 #define RED_PIN 11
 #define YELLOW_PIN 10
