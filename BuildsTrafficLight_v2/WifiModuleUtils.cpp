@@ -6,6 +6,11 @@
 
 boolean WifiModuleUtils::reset()
 {
+	sendCommand(F("require(\"send_resp\")(\"OK\")"));
+	if (String("OK").equals(readResponce(500)))
+	{
+		return true;
+	}
 	// hard reset of wifi module
 	digitalWrite(MODULE_RESET_PIN, LOW);
 	delay(200);
@@ -19,15 +24,10 @@ boolean WifiModuleUtils::reset()
 
 boolean WifiModuleUtils::testWifi(boolean reconnect)
 {
-	if (reconnect)
-	{
-		runScript(F("test_wifi.lua"));
-	}
-	else
-	{
-		sendCommand("print((wifi.sta.getip() and '$OK' or '$ERR'))");
-	}
-	
+	String script = "require(\"test_wifi\")(";
+	script += (reconnect ? "true" : "false");
+	script += ")";
+	sendCommand(script);
 	return String("OK").equals(readResponce(ESP_CONNECT_WIFI_TIMEOUT));
 }
 

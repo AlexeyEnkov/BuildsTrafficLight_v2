@@ -85,8 +85,10 @@ void loop() {
 		{
 			WifiUtils.runScript("get_conf.lua");
 			String resp = WifiUtils.readResponce();
-			if (resp.length() > 0)
+			if (resp.length() > 0 && resp.startsWith("CFG:"))
 			{
+				resp = resp.substring(4);
+				//Serial.println(resp);
 				SystemConfigHelper.handleCfg(resp);
 			}
 			needReadConf = false;

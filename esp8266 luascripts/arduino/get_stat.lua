@@ -1,17 +1,21 @@
-file.open("ids")
 local busy = false
 B_FAIL="FAIL"
 B_SUCC="SUCC"
 B_RUN="RUN"
 local status=B_SUCC
 local reqSt="OK"
+local fPos = 0
 tmr.register(
 1,
 1,
 tmr.ALARM_AUTO,
 function()
 if busy then return end
+file.open("ids")
+file.seek("set", fPos)
 local id = file.readline()
+fPos = file.seek()
+file.close()
 if status ~= B_FAIL and id and reqSt=="OK" then
     id = string.sub(id, 1, #id -1)
     for i,v in pairs(_G["cfg"].ignoredIds) do
@@ -51,7 +55,6 @@ else
     sender(reqSt)
     if reqSt=="OK" then sender(status) end
     collectgarbage();
-    file.close()
     tmr.unregister(1)
 end 
 end)
