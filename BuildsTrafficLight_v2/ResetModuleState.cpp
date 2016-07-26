@@ -7,9 +7,7 @@
 ResetModuleState::ResetModuleState() {
 	nextState = new ReadIdsState();
 }
-ResetModuleState::~ResetModuleState() {
-	
-}
+ResetModuleState::~ResetModuleState() {}
 
 void ResetModuleState::process() {
 	Serial.println(F("---ResetModuleState---"));

@@ -9,8 +9,7 @@
 
 TestConnectToWiFiState::TestConnectToWiFiState() {}
 
-TestConnectToWiFiState::~TestConnectToWiFiState()
-{}
+TestConnectToWiFiState::~TestConnectToWiFiState() {}
 
 void TestConnectToWiFiState::process() {
 	Serial.println(F("---TestConnectToWiFiState---"));
@@ -22,7 +21,7 @@ void TestConnectToWiFiState::process() {
 	{
 		SystemUtils.printError(F("WIFI"));
 		lightStrategy = new WiFiConnectionErrorLightStrategy();
-		delayMs = 10000;
+		delayMs = 5000;
 		nextState = new ResetModuleState();
 	}
 }

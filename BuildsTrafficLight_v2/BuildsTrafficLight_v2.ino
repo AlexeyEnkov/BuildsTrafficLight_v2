@@ -55,11 +55,11 @@ void setup() {
 boolean isSetupMode = false;
 
 long counter = 0;
-long counterTicksForLight = 0;
+long counterLimit = FAST_TIMER_TICKS_IN_1SEC / MAIN_TIMER_TICKS_IN_1SEC;
 
 void routineProcess()
 {
-	if (counter > FAST_TIMER_TICKS_IN_1SEC / MAIN_TIMER_TICKS_IN_1SEC)
+	if (counter > counterLimit)
 	{
 		system.lighting();
 		SoundManager.performPlayAction();
@@ -79,13 +79,13 @@ void loop() {
 
 	long del = system.getDelayAfterProcess();
 	boolean needReadConf = true;
-	while (del-- > 0)
+	while (del > 0)
 	{
 		if (needReadConf)
 		{
-			WifiUtils.runScript("get_conf.lua");
+			WifiUtils.runScript(F("get_conf.lua"));
 			String resp = WifiUtils.readResponce();
-			if (resp.length() > 0 && resp.startsWith("CFG:"))
+			if (resp.length() > 0 && resp.startsWith(F("CFG:")))
 			{
 				resp = resp.substring(4);
 				//Serial.println(resp);
@@ -93,6 +93,24 @@ void loop() {
 			}
 			needReadConf = false;
 		}
-		delay(1);
+		del -= 10;
+		delay(10);
 	}
 }
+
+/*
+//TODO pseudo code for feature
+get cfg from module
+
+get status OK, C_ERR, R_ERR, OTHER
+if OK - get SUCC,RUN,FAIL
+
+C_ERR - WIFI? WifiError or BuildServerError
+R_ERR - BuildServerErrorLightStrategy
+
+
+SUCC - BuildSeccuessLightStr - good sound if need
+FAIL - BuildFailedLightStr - fails sound
+RUN - BuildFailedAndRunningStr
+
+*/

@@ -6,8 +6,9 @@
 
 boolean WifiModuleUtils::reset()
 {
+	clearInputBuffer();
 	sendCommand(F("require(\"send_resp\")(\"OK\")"));
-	if (String("OK").equals(readResponce(500)))
+	if (String(RESP_OK).equals(readResponce(500)))
 	{
 		return true;
 	}
@@ -16,19 +17,18 @@ boolean WifiModuleUtils::reset()
 	delay(200);
 	digitalWrite(MODULE_RESET_PIN, HIGH);
 	delay(1000);
-	sendCommand("node.restart()");
-//	Serial.println(moduleStream->readString());
-//	Serial.println(moduleStream->readString());
-	return String("OK").equals(readResponce(ESP_RESET_TIMEOUT));
+	sendCommand(F("node.restart()"));
+	return String(RESP_OK).equals(readResponce(ESP_RESET_TIMEOUT));
 }
 
 boolean WifiModuleUtils::testWifi(boolean reconnect)
 {
-	String script = "require(\"test_wifi\")(";
-	script += (reconnect ? "true" : "false");
+	clearInputBuffer();
+	String script = F("require(\"test_wifi\")(");
+	script += (reconnect ? F("true") : F("false"));
 	script += ")";
 	sendCommand(script);
-	return String("OK").equals(readResponce(ESP_CONNECT_WIFI_TIMEOUT));
+	return String(F("OK")).equals(readResponce(ESP_CONNECT_WIFI_TIMEOUT));
 }
 
 void WifiModuleUtils::sendCommand(const String command)
@@ -45,22 +45,34 @@ void WifiModuleUtils::runScript(String scriptName)
 
 String WifiModuleUtils::readResponce(int timeOut)
 {
-	String resp;
+	String resp = "";
 	moduleStream->setTimeout(timeOut);
 	if (moduleStream->find("$"))
 	{
 		char c;
-		int nextTimeout = 200;
-		while (nextTimeout-- > 0)
+		int respTimeout = 500;
+		while (respTimeout > 0)
 		{
-			while (moduleStream->available() && c != '\n')
+			boolean cancel = false;
+			while (moduleStream->available())
 			{
 				c = moduleStream->read();
-				resp += c;
+				if (c == '\n')
+				{
+					cancel = true;
+				}
+				else
+				{
+					resp += c;
+				}
 			}
-			delay(1);
+			if (cancel)
+			{
+				break;
+			}
+			respTimeout -= 10;
+			delay(10);
 		}
-		resp.trim();
 	}
 	return resp;
 }
@@ -68,5 +80,5 @@ String WifiModuleUtils::readResponce(int timeOut)
 void WifiModuleUtils::clearInputBuffer(int timeout)
 {
 	moduleStream->setTimeout(timeout);
-	String trash = moduleStream->readString();
+	moduleStream->readString();
 }
