@@ -19,8 +19,8 @@ s(c,"</script>")
 end
 end
 local first=true;
+local f=require("fopen")
 local function sendId(c)
-    if first then file.open("ids") end
     local id = file.readline()
     if id then
     id = string.sub(id, 1, #id -1)
@@ -29,10 +29,13 @@ local function sendId(c)
     first = false
     s(c, id, sendId)
     else
-    file.close()
+    f.close()
     s(c,"];", sendConf)
     end
 end
-require("send_file")(c, "start_page.html", function(c) s(c, "<script type='text/javascript'>var IDS = [", sendId) end)
-if package.loaded[module] then package.loaded[module]=nil end
+require("send_file")(
+    c,
+    "start_page.html",
+    function(c) s(c, "<script type='text/javascript'>var IDS = [", function(c) f.open("ids", function() sendId(c) end) end) end)
+    if package.loaded[module] then package.loaded[module]=nil end
 end

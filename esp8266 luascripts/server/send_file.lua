@@ -1,10 +1,10 @@
 return function(c, fname, cb)
 local send = require("sender")
-file.open(fname)
+local f = require("fopen")
 local function sfile(c)
     local buf = file.read()
     if buf then send(c, buf, sfile)
-    else file.close() if cb then cb(c) else c:close() end end
+    else f.close() if cb then cb(c) else c:close() end end
 end
-sfile(c)
+f.open(fname,function() sfile(c) end)
 end
