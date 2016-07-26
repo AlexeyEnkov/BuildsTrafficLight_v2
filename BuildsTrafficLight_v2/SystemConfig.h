@@ -14,6 +14,9 @@
 #define SOUND_PARAMS_EEPROM_ADDR 3 // lenght 1 byte
 #define DEBUG_MODE_EEPROM_ADDR 3 // lenght 1 byte
 
+#define RESP_OK F("OK")
+#define RESP_CONN_ERR F("C_ERR")
+#define RESP_REQ_ERR F("R_ERR")
 
 // in percents 
 struct TrafficLightBrightness

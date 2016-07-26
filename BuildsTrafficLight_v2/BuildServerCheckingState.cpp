@@ -20,21 +20,20 @@ void BuildServerCheckingState::process() {
 	WifiUtils.runScript(F("test_build_srv.lua"));
 	String resp = WifiUtils.readResponce(15000);
 
-	if (resp.equals("OK")) {
+	if (resp.equals(RESP_OK)) {
 		nextState = new ReadIdsState();
 	}
 	else {
 		SystemUtils.printError(resp);
 
-		if (resp.equals("C_ERR"))
+		if (resp.equals(RESP_CONN_ERR))
 		{
 			lightStrategy = new BuildServerErrorLightStrategy();
 		}
 		else
 		{
-			lightStrategy = new BuildServerRequestErrorLightStrategy(); //todo need to impelment checking in todo that placed upper
+			lightStrategy = new BuildServerRequestErrorLightStrategy();
 		}
-
 		nextState = new ResetModuleState();
 	}
 }

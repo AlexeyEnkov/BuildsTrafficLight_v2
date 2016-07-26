@@ -6,45 +6,46 @@
 
 void SystemConfigHelperClass::handleCfg(String & rawCfg)
 {
-	int startParamInd = 0;
-	int delimInd = 0;
 	String curParam = "";
-	while (startParamInd < rawCfg.length())
+	int startParamInd = 0;
+	int delimInd = rawCfg.indexOf(";", startParamInd);
+	while (delimInd != -1)
 	{
-		delimInd = rawCfg.indexOf(";", startParamInd);
 		curParam = rawCfg.substring(startParamInd, delimInd);
+		Serial.println(curParam);
 		startParamInd = delimInd + 1;
-		if (curParam.startsWith("br"))
+		if (curParam.startsWith(F("br=")))
 		{
 			handleBrightness(curParam.substring(3));
 		}
-		if (curParam.startsWith("sound"))
+		if (curParam.startsWith(F("sound=")))
 		{
 			handleSound(curParam.substring(6));
 		}
+		delimInd = rawCfg.indexOf(";", startParamInd);
 	}
 }
 
 void SystemConfigHelperClass::handleBrightness(String params)
 {
 	TrafficLightBrightness newParam;
-	int stInd = 0;
-	int delInd = 0;
-	while (delInd != -1)
+	int startInd = 0;
+	int delimeterInd = 0;
+	while (delimeterInd != -1)
 	{
-		delInd = params.indexOf(",", stInd);
+		delimeterInd = params.indexOf(",", startInd);
 		String val;
-		if (delInd == -1)
+		if (delimeterInd == -1)
 		{
-			val = params.substring(stInd+2);
+			val = params.substring(startInd + 2);
 		}
 		else
 		{
-			val = params.substring(stInd+2, delInd);
+			val = params.substring(startInd + 2, delimeterInd);
 		}
-		char typeOfLed = params.charAt(stInd);
+		char typeOfLed = params.charAt(startInd);
 		byte percVal = val.toInt();
-		percVal = percVal > 100 ? 100 : percVal;
+		percVal = percVal > 100 || percVal < 0 ? 0 : percVal;
 		switch (typeOfLed)
 		{
 		case 'r':
@@ -57,7 +58,7 @@ void SystemConfigHelperClass::handleBrightness(String params)
 			newParam.green = percVal;
 			break;
 		}
-		stInd = delInd + 1;
+		startInd = delimeterInd + 1;
 	}
 	TrafficLightBrightness oldParam = SystemConfig.getTrafficLightBrightness();
 	if (oldParam.green != newParam.green ||
@@ -66,7 +67,7 @@ void SystemConfigHelperClass::handleBrightness(String params)
 	{
 		SystemConfig.updateTrafficLightBrightness(newParam);
 	}
-	
+
 }
 
 void SystemConfigHelperClass::handleSound(String params)
@@ -77,5 +78,5 @@ void SystemConfigHelperClass::handleSound(String params)
 	{
 		SystemConfig.updateSoundParams(newParams);
 	}
-	
+
 }

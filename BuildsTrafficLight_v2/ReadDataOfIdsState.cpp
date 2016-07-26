@@ -12,9 +12,7 @@
 
 ReadDataOfIdsState::ReadDataOfIdsState() {}
 
-ReadDataOfIdsState::~ReadDataOfIdsState() {
-
-}
+ReadDataOfIdsState::~ReadDataOfIdsState() {}
 
 void ReadDataOfIdsState::process() {
 	Serial.println(F("---ReadDataOfIdsState---"));
@@ -22,12 +20,9 @@ void ReadDataOfIdsState::process() {
 	WifiUtils.runScript(F("get_stat.lua"));
 	// choose next state
 	String resp = WifiUtils.readResponce(15000);
-	if (resp.equalsIgnoreCase("OK")) {
+	if (resp.equalsIgnoreCase(RESP_OK)) {
+
 		String stat = WifiUtils.readResponce();
-
-		delayMs = 5000; // msec if all good
-		nextState = new ReadIdsState();
-
 		// change light strategy
 		if (stat.equalsIgnoreCase(F("FAIL")))
 		{
@@ -44,11 +39,17 @@ void ReadDataOfIdsState::process() {
 			lightStrategy = new BuildsSuccessLightStrategy();
 			SoundManager.playGoodSound();
 		}
+
+		delayMs = 5000; // msec if all good
+		if (SystemUtils.isTimeForUpdateIds())
+		{
+			nextState = new ReadIdsState();
+		}
 	}
 	else {
 		SystemUtils.printError(resp);
 
 		nextState = new TestConnectToWiFiState(); 
-		delayMs = 8000;
+		delayMs = 1000;
 	}
 }
