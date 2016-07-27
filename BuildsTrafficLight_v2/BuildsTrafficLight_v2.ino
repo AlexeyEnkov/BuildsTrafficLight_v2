@@ -44,7 +44,7 @@ void setup() {
 	Timer1.start();
 
 	SystemConfig.initFromEEPROM();// init system settings stored in eeprom
-	SystemConfig.updateDebugMode(false); //debug off temporary
+	SystemConfig.updateDebugMode(true); //debug off temporary
 
 	SoundManager.playInitSound();
 	
@@ -85,10 +85,10 @@ void loop() {
 		{
 			WifiUtils.runScript(F("get_conf.lua"));
 			String resp = WifiUtils.readResponce();
+			Serial.println(resp);
 			if (resp.length() > 0 && resp.startsWith(F("CFG:")))
 			{
 				resp = resp.substring(4);
-				//Serial.println(resp);
 				SystemConfigHelper.handleCfg(resp);
 			}
 			needReadConf = false;

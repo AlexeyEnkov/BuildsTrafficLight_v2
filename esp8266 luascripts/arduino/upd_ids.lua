@@ -1,5 +1,5 @@
 local s=require("send_resp")
-if wifi.sta.getip() then
+if wifi.sta.status()==5 then
 http.get(
 "http://".._G["cfg"].ip..":".._G["cfg"].port.."/guestAuth/app/rest/buildTypes",
 "Accept: application/json\r\n",
@@ -25,7 +25,7 @@ function(code, data)
              if notParseIds then
                 local k,oldIds= pcall(cjson.decode,notParseIds)
                 if k then
-                    for i,_ in pairs(oldIds) do
+                    for i,_ in pairs(newIds) do
                         if newIds[i] ~= oldIds[i] then isNew=true break end 
                     end
                     oldIds=nil

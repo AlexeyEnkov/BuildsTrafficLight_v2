@@ -1,1 +1,1 @@
-return function(r) uart.write(0,"$"..r.."\n") end
+return function(r) print("$"..r) end

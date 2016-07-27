@@ -1,6 +1,6 @@
 return function(rec)
     local s = require("send_resp")
-    if wifi.sta.getip() then s("OK")
+    if wifi.sta.status() == 5 then s("OK")
     else
         if not rec then s("ERR")
         else

@@ -66,8 +66,9 @@ local function start()
     end)
     tmr.start(1)
 end
-if wifi.sta.getip() then 
+if wifi.sta.status()==5 then 
 f.open("ids", start)
 else
+_G["lStatus"]=nil
 require("send_resp")("W_ERR")
 end

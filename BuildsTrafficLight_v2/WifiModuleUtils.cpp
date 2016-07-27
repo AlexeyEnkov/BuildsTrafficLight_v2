@@ -45,22 +45,22 @@ void WifiModuleUtils::runScript(String scriptName)
 
 String WifiModuleUtils::readResponce(int timeOut)
 {
-	String resp = "";
+	String resp;
 	moduleStream->setTimeout(timeOut);
 	if (moduleStream->find("$"))
 	{
 		char c;
-		int respTimeout = 500;
+		int respTimeout = 300;
 		while (respTimeout > 0)
 		{
 			boolean cancel = false;
 			while (moduleStream->available())
 			{
 				c = moduleStream->read();
-			//	Serial.write(c);
-				if (c == '\n')
+				if (c == '\n' || c == '\r')
 				{
 					cancel = true;
+					break;
 				}
 				else
 				{
@@ -71,8 +71,8 @@ String WifiModuleUtils::readResponce(int timeOut)
 			{
 				break;
 			}
-			respTimeout -= 10;
-			delay(10);
+			respTimeout -= 1;
+			delay(1);
 		}
 	}
 	return resp;
@@ -81,5 +81,5 @@ String WifiModuleUtils::readResponce(int timeOut)
 void WifiModuleUtils::clearInputBuffer(int timeout)
 {
 	moduleStream->setTimeout(timeout);
-	moduleStream->readString();
+	Serial.println(moduleStream->readString());
 }
