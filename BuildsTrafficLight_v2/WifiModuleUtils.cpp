@@ -71,8 +71,8 @@ String WifiModuleUtils::readResponce(int timeOut)
 			{
 				break;
 			}
-			respTimeout -= 10;
-			delay(10);
+			respTimeout -= 1;
+			delay(1);
 		}
 	}
 	return resp;
