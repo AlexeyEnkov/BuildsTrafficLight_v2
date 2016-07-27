@@ -12,7 +12,6 @@ void SystemConfigHelperClass::handleCfg(String & rawCfg)
 	while (delimInd != -1)
 	{
 		curParam = rawCfg.substring(startParamInd, delimInd);
-		Serial.println(curParam);
 		startParamInd = delimInd + 1;
 		if (curParam.startsWith(F("br=")))
 		{

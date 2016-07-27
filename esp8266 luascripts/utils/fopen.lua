@@ -12,10 +12,13 @@ end
 function M.close()
     file.close()
     table.remove(_G["fqueue"],1)
-    if #_G["fqueue"]>0 then
-        local nowExec = _G["fqueue"][1]
-        file.open(nowExec.n,nowExec.m)
-        nowExec.c()
+    if #_G["fqueue"]>0 then 
+        node.task.post(
+        function()
+            local nowExec = _G["fqueue"][1]
+            file.open(nowExec.n,nowExec.m)
+            nowExec.c()           
+        end)
     end
 end
 

@@ -13,6 +13,7 @@ return function(rec)
             wifi.sta.eventMonReg(wifi.STA_WRONGPWD, function() cb("ERR") end)
             wifi.sta.eventMonStart()
             wifi.sta.config(_G["cfg"].ssid, _G["cfg"].pass)
+            wifi.sta.connect()
         end
     end
 end

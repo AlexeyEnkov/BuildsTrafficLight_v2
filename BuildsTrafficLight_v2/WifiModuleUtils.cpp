@@ -57,6 +57,7 @@ String WifiModuleUtils::readResponce(int timeOut)
 			while (moduleStream->available())
 			{
 				c = moduleStream->read();
+			//	Serial.write(c);
 				if (c == '\n')
 				{
 					cancel = true;

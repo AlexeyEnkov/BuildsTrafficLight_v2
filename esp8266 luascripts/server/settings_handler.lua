@@ -3,12 +3,14 @@ return function(c,data,cb)
 local rData=require("decode")(data)
 local _,_,rConf=string.find(rData, "config=(.+)")
 local succ=false
+local wifiChanged=false
 if rConf then
     local k,nConf = pcall(cjson.decode,rConf) 
     if k then 
         local oldC = {}
         oldC.ssid=nConf.ssid
-        if (nConf.pass and #nConf.pass >= 8) then oldC.pass=nConf.pass else oldC.pass=_G["cfg"].pass end
+        if nConf.ssid ~= _G["cfg"].ssid then wifiChanged=true end
+        if (nConf.pass and #nConf.pass >= 8) then wifiChanged=true oldC.pass=nConf.pass else oldC.pass=_G["cfg"].pass end
         oldC.ip=nConf.ip
         oldC.port=nConf.port
         local newBright={}
@@ -38,7 +40,7 @@ if package.loaded[module] then package.loaded[module]=nil end
 local snd=require("sender")
 local redirectJs="<script type='text/javascript'>setTimeout(function(){window.location.href='/'},2000);</script>"
 if succ then
-snd(c,"<div>Saved</div>"..redirectJs, function(c) c:close() c:on("disconnection",function(c) wifi.sta.config(_G["cfg"].ssid, _G["cfg"].pass) end) end )
+snd(c,"<div>Saved</div>"..redirectJs, function(c) c:close() c:on("disconnection",function(c) if wifiChanged then wifi.sta.config(_G["cfg"].ssid, _G["cfg"].pass) wifi.sta.connect() end end) end )
 else
 snd(c,"<div>Err</div>"..redirectJs)
 end

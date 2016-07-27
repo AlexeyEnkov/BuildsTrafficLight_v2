@@ -20,22 +20,10 @@ end
 end
 local first=true;
 local f=require("fopen")
+local sf=require("send_file")
 local function sendId(c)
-    local id = file.readline()
-    if id then
-    id = string.sub(id, 1, #id -1)
-    id = "'"..id.."'"
-    if not first then id=","..id end
-    first = false
-    s(c, id, sendId)
-    else
-    f.close()
-    s(c,"];", sendConf)
-    end
+    sf(c,"ids", function(c) s(c, ";", sendConf) end)
 end
-require("send_file")(
-    c,
-    "start_page.html",
-    function(c) s(c, "<script type='text/javascript'>var IDS = [", function(c) f.open("ids", function() sendId(c) end) end) end)
+sf(c,"start_page.html",function(c) s(c, "<script type='text/javascript'>var IDS = ", sendId) end)
     if package.loaded[module] then package.loaded[module]=nil end
 end
