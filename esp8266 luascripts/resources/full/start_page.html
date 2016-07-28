@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="start_page.css"></link>
+    <script src="start_page.js" async></script>
+</head>
+<body>
+<table id="cont" cellpadding="0" cellspacing="0">
+<tr>
+  <td id="left">
+    <div id="trl">
+      <div id="r"></div>
+      <div id="y"></div>
+      <div id="g"></div>
+    </div>
+  </td>
+  <td id="right">
+    <div id="wifi">
+      <div>WiFi:</div>
+      <input type="text" name="ssid" placeholder="ssid"/>
+      <input type="password" name="pass" placeholder="password"/>
+    </div>
+    <div id="host">
+      <div>Build Server:</div>
+      <input type="text" name="ip" placeholder="ip"/>
+      <input type="text" name="port" placeholder="port"/>
+    </div>
+    <div id="bright">
+      <div>Brightness (%):</div>
+      <span>R</span><input type="text" name="red"/>
+      <span>G</span><input type="text" name="yellow"/>
+      <span>B</span><input type="text" name="green"/>
+    </div>
+    <div id="sound">
+      <label>Sound:<input type="checkbox" name="sound"/></label>
+    </div>
+    <div id="ids">
+      <div>Ignored build ids:</div>
+      <div id="idscont">
+      </div>
+    </div>
+    <div id="save">Save</div>
+  </td>
+</tr>
+<tr>
+  <td colspan="2">
+    <div id="info">
+      <div id="ip"></div>
+      <div id="cid"></div>
+    </div>
+  </td>
+</tr>
+</table>
+</body>
+</html>
