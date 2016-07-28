@@ -14,8 +14,6 @@
 
 #include <TimerOne.h>
 
-LightTrafficSystem system = LightTrafficSystem(new ReadIdsState(), new InitSystemLightStrategy());
-
 void setup() {
 
 	pinMode(MODULE_RESET_PIN, OUTPUT);
@@ -52,6 +50,8 @@ void setup() {
 	Serial.println(WifiUtils.testWifi(true));
 }
 
+LightTrafficSystem ltrSystem = LightTrafficSystem(new ReadIdsState(), new InitSystemLightStrategy());
+
 boolean isSetupMode = false;
 
 long counter = 0;
@@ -61,7 +61,7 @@ void routineProcess()
 {
 	if (counter > counterLimit)
 	{
-		system.lighting();
+		ltrSystem.lighting();
 		SoundManager.performPlayAction();
 		counter = 0;
 	}
@@ -75,9 +75,9 @@ void loop() {
 	}
 
 	// process current state of system (main process)
-	system.process();
+	ltrSystem.process();
 
-	long del = system.getDelayAfterProcess();
+	long del = ltrSystem.getDelayAfterProcess();
 	boolean needReadConf = true;
 	while (del > 0)
 	{
@@ -91,6 +91,8 @@ void loop() {
 				resp = resp.substring(4);
 				SystemConfigHelper.handleCfg(resp);
 			}
+			WifiUtils.sendCommand(F("require(\"send_resp\")(node.heap())"));
+			Serial.print(F("module heap ")); Serial.println(WifiUtils.readResponce());
 			needReadConf = false;
 		}
 		del -= 10;

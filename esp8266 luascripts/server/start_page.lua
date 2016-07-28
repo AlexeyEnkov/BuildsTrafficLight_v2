@@ -1,4 +1,4 @@
-module=...
+local module=...
 return function(c)
 local s = require("sender")
 
@@ -12,8 +12,10 @@ if #cfg.ignoredIds > 0 then dt.cfg.ignoredIds=cfg.ignoredIds end
 dt.status=_G["lStatus"] dt.targetId=_G["targetId"]
 dt.ownIp=wifi.sta.getip()
 local ok, jsData = pcall(cjson.encode, dt)
+dt=nil
 if ok then
 s(c,"var rawData='"..jsData.."';</script>")
+jsData=nil
 else
 s(c,"</script>")
 end

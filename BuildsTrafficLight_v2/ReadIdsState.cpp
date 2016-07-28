@@ -13,7 +13,6 @@ ReadIdsState::~ReadIdsState()
 
 // read ids to eeprom 
 void ReadIdsState::process() {
-	nextState = new ReadDataOfIdsState();
 
 	Serial.println(F("---ReadIdsState---"));
 
@@ -24,6 +23,10 @@ void ReadIdsState::process() {
 		SystemUtils.printError(resp);
 		nextState = new TestConnectToWiFiState();
 		delayMs = 2000;
+	}
+	else
+	{
+		nextState = new ReadDataOfIdsState();
 	}
 }
 

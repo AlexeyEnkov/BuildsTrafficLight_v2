@@ -8,7 +8,7 @@ boolean WifiModuleUtils::reset()
 {
 	clearInputBuffer();
 	sendCommand(F("require(\"send_resp\")(\"OK\")"));
-	if (String(RESP_OK).equals(readResponce(500)))
+	if (String(RESP_OK).equals(readResponce(1000)))
 	{
 		return true;
 	}
@@ -71,8 +71,8 @@ String WifiModuleUtils::readResponce(int timeOut)
 			{
 				break;
 			}
-			respTimeout -= 1;
-			delay(1);
+			respTimeout -= 10;
+			delay(10);
 		}
 	}
 	return resp;
@@ -81,5 +81,5 @@ String WifiModuleUtils::readResponce(int timeOut)
 void WifiModuleUtils::clearInputBuffer(int timeout)
 {
 	moduleStream->setTimeout(timeout);
-	Serial.println(moduleStream->readString());
+	moduleStream->readString();
 }

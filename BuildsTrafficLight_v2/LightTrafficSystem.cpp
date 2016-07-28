@@ -42,6 +42,7 @@ void LightTrafficSystem::process() {
 	updateLightStrategy();
 
 	setCurrentState();
+	Serial.print(F("in process ")); SystemUtils.printFreeMemory();
 }
 
 void LightTrafficSystem::lighting() {

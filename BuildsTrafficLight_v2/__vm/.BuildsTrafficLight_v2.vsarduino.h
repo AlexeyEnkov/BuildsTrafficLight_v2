@@ -13,7 +13,7 @@
 #define __AVR_ATmega32u4__
 #define __AVR_ATmega32U4__
 #define F_CPU 16000000L
-#define ARDUINO 10608
+#define ARDUINO 106010
 #define ARDUINO_AVR_LEONARDO
 #define ARDUINO_ARCH_AVR
 #define USB_VID 0x2341
@@ -42,7 +42,6 @@
 #endif
 #define NEW_H
 typedef void *__builtin_va_list;
-typedef unsigned char byte;
 extern "C" void __cxa_pure_virtual() {;}
 
 
@@ -52,62 +51,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #undef F
 #define F(string_literal) ((const PROGMEM char *)(string_literal))
 #undef PSTR
-#define PSTR(string_literal) ((const PROGMEM char *)(string_literal))
-#undef cli
-#define cli()
-#define pgm_read_byte(address_short)
-#define pgm_read_word(address_short)
-#define pgm_read_word2(address_short)
-#define digitalPinToPort(P)
-#define digitalPinToBitMask(P) 
-#define digitalPinToTimer(P)
-#define analogInPinToBit(P)
-#define portOutputRegister(P)
-#define portInputRegister(P)
-#define portModeRegister(P)
-#include <..\BuildsTrafficLight_v2\BuildsTrafficLight_v2.ino>
-#include <..\BuildsTrafficLight_v2\BasicLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\BasicLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\BuildServerCheckingState.cpp>
-#include <..\BuildsTrafficLight_v2\BuildServerCheckingState.h>
-#include <..\BuildsTrafficLight_v2\BuildServerErrorLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\BuildServerErrorLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\BuildServerRequestErrorLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\BuildServerRequestErrorLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\BuildsFailedAndRunningLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\BuildsFailedAndRunningLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\BuildsFailedLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\BuildsFailedLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\BuildsSuccessLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\BuildsSuccessLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\InitSystemLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\InitSystemLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\LightTrafficSystem.cpp>
-#include <..\BuildsTrafficLight_v2\LightTrafficSystem.h>
-#include <..\BuildsTrafficLight_v2\ReadDataOfIdsState.cpp>
-#include <..\BuildsTrafficLight_v2\ReadDataOfIdsState.h>
-#include <..\BuildsTrafficLight_v2\ReadIdsState.cpp>
-#include <..\BuildsTrafficLight_v2\ReadIdsState.h>
-#include <..\BuildsTrafficLight_v2\ResetModuleState.cpp>
-#include <..\BuildsTrafficLight_v2\ResetModuleState.h>
-#include <..\BuildsTrafficLight_v2\RtttlPlayer.cpp>
-#include <..\BuildsTrafficLight_v2\RtttlPlayer.h>
-#include <..\BuildsTrafficLight_v2\SoundManager.cpp>
-#include <..\BuildsTrafficLight_v2\SoundManager.h>
-#include <..\BuildsTrafficLight_v2\SystemConfig.cpp>
-#include <..\BuildsTrafficLight_v2\SystemConfig.h>
-#include <..\BuildsTrafficLight_v2\SystemConfigHelper.cpp>
-#include <..\BuildsTrafficLight_v2\SystemConfigHelper.h>
-#include <..\BuildsTrafficLight_v2\SystemState.cpp>
-#include <..\BuildsTrafficLight_v2\SystemState.h>
-#include <..\BuildsTrafficLight_v2\SystemUtils.cpp>
-#include <..\BuildsTrafficLight_v2\SystemUtils.h>
-#include <..\BuildsTrafficLight_v2\TestConnectToWiFiState.cpp>
-#include <..\BuildsTrafficLight_v2\TestConnectToWiFiState.h>
-#include <..\BuildsTrafficLight_v2\TestLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\TestLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\WiFiConnectionErrorLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\WiFiConnectionErrorLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\WifiModuleUtils.cpp>
-#include <..\BuildsTrafficLight_v2\WifiModuleUtils.h>
+#define PSTR(string_literal) ((const PROGMEM char *)(string_literal))")
+#include "BuildsTrafficLight_v2.ino"
 #endif
