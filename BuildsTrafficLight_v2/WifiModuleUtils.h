@@ -23,10 +23,11 @@ public:
 	WifiModuleUtils(void) {};
 	~WifiModuleUtils() {};
 
-	boolean reset();
+	boolean reset(boolean forseHardReset);
 	
 	boolean testWifi(boolean reconnect);
 
+	long getModuleHeap();
 	void sendCommand(const String command);
 	void runScript(String scriptName);
 

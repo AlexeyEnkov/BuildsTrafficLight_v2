@@ -46,7 +46,7 @@ void setup() {
 
 	SoundManager.playInitSound();
 	
-	Serial.println(WifiUtils.reset());
+	Serial.println(WifiUtils.reset(false));
 	Serial.println(WifiUtils.testWifi(true));
 }
 
@@ -76,7 +76,6 @@ void loop() {
 
 	// process current state of system (main process)
 	ltrSystem.process();
-
 	long del = ltrSystem.getDelayAfterProcess();
 	boolean needReadConf = true;
 	while (del > 0)
@@ -84,15 +83,17 @@ void loop() {
 		if (needReadConf)
 		{
 			WifiUtils.runScript(F("get_conf.lua"));
+
+			Serial.println("bef resp");
 			String resp = WifiUtils.readResponce();
-			Serial.println(resp);
+			Serial.println(resp.length());
 			if (resp.length() > 0 && resp.startsWith(F("CFG:")))
 			{
+			//	Serial.println(resp);
 				resp = resp.substring(4);
 				SystemConfigHelper.handleCfg(resp);
 			}
-			WifiUtils.sendCommand(F("require(\"send_resp\")(node.heap())"));
-			Serial.print(F("module heap ")); Serial.println(WifiUtils.readResponce());
+			Serial.print(F("module heap ")); Serial.println(WifiUtils.getModuleHeap());
 			needReadConf = false;
 		}
 		del -= 10;

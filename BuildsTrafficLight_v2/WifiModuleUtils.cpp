@@ -4,13 +4,17 @@
 
 #include "WifiModuleUtils.h"
 
-boolean WifiModuleUtils::reset()
+boolean WifiModuleUtils::reset(boolean forseHardReset)
 {
 	clearInputBuffer();
-	sendCommand(F("require(\"send_resp\")(\"OK\")"));
-	if (String(RESP_OK).equals(readResponce(1000)))
+	if (!forseHardReset)
 	{
-		return true;
+		sendCommand(F("require(\"send_resp\")(\"OK\")"));
+		if (String(RESP_OK).equals(readResponce(1000)))
+		{
+			return true;
+		}
+		clearInputBuffer();
 	}
 	// hard reset of wifi module
 	digitalWrite(MODULE_RESET_PIN, LOW);
@@ -31,6 +35,19 @@ boolean WifiModuleUtils::testWifi(boolean reconnect)
 	return String(F("OK")).equals(readResponce(ESP_CONNECT_WIFI_TIMEOUT));
 }
 
+long WifiModuleUtils::getModuleHeap()
+{
+	sendCommand(F("require(\"send_resp\")(node.heap())"));
+	String heap = readResponce();
+	if (heap.length() == 0)
+	{
+		return 0;
+	}
+	char buf[12];
+	heap.toCharArray(buf, 12);
+	return atol(buf);
+}
+
 void WifiModuleUtils::sendCommand(const String command)
 {
 	clearInputBuffer();
@@ -45,10 +62,14 @@ void WifiModuleUtils::runScript(String scriptName)
 
 String WifiModuleUtils::readResponce(int timeOut)
 {
-	String resp;
-	moduleStream->setTimeout(timeOut);
+	String resp = "RESP_ERR";
+	//moduleStream->setTimeout(timeOut);
+	moduleStream->setTimeout(1500);
+	Serial.println(moduleStream->readString());
+	return "OK";
 	if (moduleStream->find("$"))
 	{
+		resp = "";
 		char c;
 		int respTimeout = 300;
 		while (respTimeout > 0)

@@ -20,10 +20,7 @@ void BuildServerCheckingState::process() {
 	WifiUtils.runScript(F("test_build_srv.lua"));
 	String resp = WifiUtils.readResponce(15000);
 
-	if (resp.equals(RESP_OK)) {
-		nextState = new ReadIdsState();
-	}
-	else {
+	if (!resp.equals(RESP_OK)) {
 		SystemUtils.printError(resp);
 
 		if (resp.equals(RESP_CONN_ERR))
@@ -34,6 +31,6 @@ void BuildServerCheckingState::process() {
 		{
 			lightStrategy = new BuildServerRequestErrorLightStrategy();
 		}
-		nextState = new ResetModuleState();
 	}
+	nextState = new ResetModuleState();
 }
