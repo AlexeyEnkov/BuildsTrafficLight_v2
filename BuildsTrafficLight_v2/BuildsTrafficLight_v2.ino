@@ -76,29 +76,23 @@ void loop() {
 
 	// process current state of system (main process)
 	ltrSystem.process();
-	long del = ltrSystem.getDelayAfterProcess();
-	boolean needReadConf = true;
-	while (del > 0)
-	{
-		if (needReadConf)
-		{
-			WifiUtils.runScript(F("get_conf.lua"));
 
-			Serial.println("bef resp");
-			String resp = WifiUtils.readResponce();
-			Serial.println(resp.length());
-			if (resp.length() > 0 && resp.startsWith(F("CFG:")))
-			{
-			//	Serial.println(resp);
-				resp = resp.substring(4);
-				SystemConfigHelper.handleCfg(resp);
-			}
-			Serial.print(F("module heap ")); Serial.println(WifiUtils.getModuleHeap());
-			needReadConf = false;
-		}
-		del -= 10;
-		delay(10);
+
+	WifiUtils.runScript(F("get_conf.lua"));
+
+	Serial.println("bef resp");
+	String resp = WifiUtils.readResponce();
+	Serial.println(resp.length());
+	if (resp.length() > 0 && resp.startsWith(F("CFG:")))
+	{
+		resp = resp.substring(4);
+		SystemConfigHelper.handleCfg(resp);
 	}
+	Serial.print(F("module heap ")); Serial.println(WifiUtils.getModuleHeap());
+
+	long del = ltrSystem.getDelayAfterProcess();
+	Serial.println(del);
+	delay(del);
 }
 
 /*

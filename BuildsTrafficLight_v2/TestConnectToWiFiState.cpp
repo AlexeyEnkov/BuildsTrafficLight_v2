@@ -21,7 +21,7 @@ void TestConnectToWiFiState::process() {
 	{
 		SystemUtils.printError(F("WIFI"));
 		lightStrategy = new WiFiConnectionErrorLightStrategy();
-		delayMs = 1000;
+		delayMs = 5000;
 		nextState = new ResetModuleState();
 	}
 }

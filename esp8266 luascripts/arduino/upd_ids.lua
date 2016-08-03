@@ -8,7 +8,8 @@ function(code, data)
     if (code ~= 200) then if(code<0) then s("C_ERR") else s("R_ERR") end
     else
       local ok, json = pcall(cjson.decode, data)
-      if ok then
+      data=nil
+      if ok and json.buildType then
          local newIds = {}
          local ind = 1
          for _,v in pairs(json.buildType) do 
@@ -16,7 +17,6 @@ function(code, data)
             ind = ind+1
          end
          json=nil
-         collectgarbage("collect")
          local f=require("fopen")
          local function updIds()
              local notParseIds = file.read()

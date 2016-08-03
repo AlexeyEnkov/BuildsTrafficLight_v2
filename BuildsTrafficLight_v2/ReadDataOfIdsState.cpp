@@ -10,7 +10,10 @@
 #include "TestConnectToWifiState.h"
 
 
-ReadDataOfIdsState::ReadDataOfIdsState() {}
+ReadDataOfIdsState::ReadDataOfIdsState() 
+{
+	lightStrategy = 0;
+}
 
 ReadDataOfIdsState::~ReadDataOfIdsState() {}
 
@@ -50,6 +53,6 @@ void ReadDataOfIdsState::process() {
 		SystemUtils.printError(resp);
 
 		nextState = new TestConnectToWiFiState(); 
-		delayMs = 1000;
+		delayMs = 2000;
 	}
 }
