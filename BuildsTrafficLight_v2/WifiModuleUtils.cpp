@@ -63,8 +63,14 @@ String WifiModuleUtils::readResponce(int timeOut)
 	String resp = F("RESP_ERR");
 	boolean isReadState = false;
 	char c;
-	int respTimeout = timeOut;
-	while (respTimeout > 0)
+	moduleStream->setTimeout(timeOut);
+	if (moduleStream->find("$"))
+	{
+		moduleStream->setTimeout(500);
+		resp = moduleStream->readStringUntil('\r');
+		resp.trim();
+	}
+	/*while (respTimeout > 0)
 	{
 		boolean cancel = false;
 		while (moduleStream->available())
@@ -98,7 +104,7 @@ String WifiModuleUtils::readResponce(int timeOut)
 		}
 		respTimeout -= 10;
 		delay(10);
-	}
+	}*/
 
 	return resp;
 }

@@ -77,6 +77,9 @@ void loop() {
 	// process current state of system (main process)
 	ltrSystem.process();
 
+	// importat to make delay after process 
+	long del = ltrSystem.getDelayAfterProcess();
+	delay(del);
 
 	WifiUtils.runScript(F("get_conf.lua"));
 
@@ -90,9 +93,6 @@ void loop() {
 	}
 	Serial.print(F("module heap ")); Serial.println(WifiUtils.getModuleHeap());
 
-	long del = ltrSystem.getDelayAfterProcess();
-	Serial.println(del);
-	delay(del);
 }
 
 /*

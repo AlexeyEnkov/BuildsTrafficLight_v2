@@ -24,7 +24,6 @@ boolean SystemUtils_::isTimeForUpdateIds()
 {
 	if (timeForUpdateIds < millis())
 	{
-		Serial.print(F("in get time for update ")); printFreeMemory();
 		timeForUpdateIds = millis() + MS_BETWEEN_UP_IDS;
 		return true;
 	}
