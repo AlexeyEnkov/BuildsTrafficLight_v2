@@ -12,7 +12,8 @@ ResetModuleState::~ResetModuleState() {}
 void ResetModuleState::process() {
 	Serial.println(F("---ResetModuleState---"));
 
-	if (!WifiUtils.reset())
+	boolean forseHardReset = WifiUtils.getModuleHeap() < 22000L;
+	if (!WifiUtils.reset(forseHardReset))
 	{
 		SystemUtils.printError(F("RESET"));
 	}

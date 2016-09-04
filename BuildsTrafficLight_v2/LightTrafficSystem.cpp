@@ -21,31 +21,31 @@ void LightTrafficSystem::setCurrentState() {
 
 void LightTrafficSystem::updateLightStrategy() {
 	// update light strategy
+	lightLock = true;
 	if (currentState->getLightStrategy() != 0) {
 		delete currentLightStrategy;
-		currentLightStrategy = 0;
-
 		currentLightStrategy = currentState->getLightStrategy();
 	}
+	lightLock = false;
 }
 
 long LightTrafficSystem::getDelayAfterProcess()
 {
-	return delayAfterProc;
+	return delayAfterProcess;
 }
 
 void LightTrafficSystem::process() {
 	currentState->process();
 
-	delayAfterProc = currentState->getDelayAfterProcessState();
-
 	updateLightStrategy();
+	
+	delayAfterProcess = currentState->getDelayAfterProcessState();
 
 	setCurrentState();
 }
 
 void LightTrafficSystem::lighting() {
-	if (currentLightStrategy != 0) {
+	if (!lightLock) {
 		currentLightStrategy->lighting();
 	}
 }

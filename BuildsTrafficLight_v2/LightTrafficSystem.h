@@ -24,7 +24,8 @@ public:
 private:
 	SystemState* currentState;
 	BasicLightStrategy* currentLightStrategy;
-	long delayAfterProc;
+	long delayAfterProcess;
+	volatile boolean lightLock=false;
 };
 
 #endif

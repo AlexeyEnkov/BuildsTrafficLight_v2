@@ -25,13 +25,19 @@ if rConf then
         end
         oldC.sound=nConf.sound
         oldC.ignoredIds=nConf.ignoredIds
+        nConf=nil
         _G["cfg"]=oldC
         k, serNCfg = pcall(cjson.encode, oldC)
         if k then
-            file.open("cfg", "w")
-            file.writeline(serNCfg)
-            file.close()
-            succ=true
+            require("fopen").open(
+                "cfg",
+                function()
+                    file.writeline(serNCfg)
+                    require("fopen").close()
+                    succ=true
+                    serCfg=nil
+                end,
+                "w")
         end
     end
 end
@@ -40,7 +46,7 @@ if package.loaded[module] then package.loaded[module]=nil end
 local snd=require("sender")
 local redirectJs="<script type='text/javascript'>setTimeout(function(){window.location.href='/'},2000);</script>"
 if succ then
-snd(c,"<div>Saved</div>"..redirectJs, function(c) c:close() c:on("disconnection",function(c) if wifiChanged then wifi.sta.config(_G["cfg"].ssid, _G["cfg"].pass) wifi.sta.connect() end end) end )
+snd(c,"<div>Saved</div>"..redirectJs, function(c) c:close() c:on("disconnection",function(c) if wifiChanged then require("wifi_con")() end end) end )
 else
 snd(c,"<div>Err</div>"..redirectJs)
 end

@@ -4,13 +4,17 @@
 
 #include "WifiModuleUtils.h"
 
-boolean WifiModuleUtils::reset()
+boolean WifiModuleUtils::reset(boolean forseHardReset)
 {
 	clearInputBuffer();
+	if (!forseHardReset)
+	{
 	sendCommand(F("require(\"send_resp\")(\"OK\")"));
-	if (String(RESP_OK).equals(readResponce(500)))
+		if (String(RESP_OK).equals(readResponce(1000)))
 	{
 		return true;
+	}
+		clearInputBuffer();
 	}
 	// hard reset of wifi module
 	digitalWrite(MODULE_RESET_PIN, LOW);
@@ -31,55 +35,82 @@ boolean WifiModuleUtils::testWifi(boolean reconnect)
 	return String(F("OK")).equals(readResponce(ESP_CONNECT_WIFI_TIMEOUT));
 }
 
+long WifiModuleUtils::getModuleHeap()
+{
+	sendCommand(F("require(\"send_resp\")(node.heap())"));
+	String heap = readResponce();
+	if (heap.length() == 0)
+	{
+		return 0;
+	}
+	char buf[12];
+	heap.toCharArray(buf, 12);
+	return atol(buf);
+}
+
 void WifiModuleUtils::sendCommand(const String command)
 {
-	clearInputBuffer();
 	moduleStream->println(command);
 }
 
 void WifiModuleUtils::runScript(String scriptName)
 {
-	clearInputBuffer();
 	moduleStream->print(F("dofile(\"")); moduleStream->print(scriptName); moduleStream->println(F("\")"));
 }
 
 String WifiModuleUtils::readResponce(int timeOut)
 {
-	String resp = "";
+	String resp = F("RESP_ERR");
+	boolean isReadState = false;
+	char c;
 	moduleStream->setTimeout(timeOut);
 	if (moduleStream->find("$"))
 	{
-		char c;
-		int respTimeout = 500;
-		while (respTimeout > 0)
+		moduleStream->setTimeout(500);
+		resp = moduleStream->readStringUntil('\r');
+		resp.trim();
+	}
+	/*while (respTimeout > 0)
 		{
 			boolean cancel = false;
 			while (moduleStream->available())
 			{
 				c = moduleStream->read();
-			//	Serial.write(c);
-				if (c == '\n')
+
+			if (isReadState)
+			{
+				if (c == '\n' || c == '\r')
 				{
 					cancel = true;
+					break;
 				}
 				else
 				{
 					resp += c;
 				}
 			}
+			else
+			{
+				if (c == '$')
+				{
+					isReadState = true;
+					resp = "";
+				}
+			}
+		}
 			if (cancel)
 			{
 				break;
 			}
-			respTimeout -= 1;
-			delay(1);
-		}
-	}
+		respTimeout -= 10;
+		delay(10);
+	}*/
+
 	return resp;
 }
 
 void WifiModuleUtils::clearInputBuffer(int timeout)
 {
 	moduleStream->setTimeout(timeout);
-	moduleStream->readString();
+	String trash = moduleStream->readString();
 }

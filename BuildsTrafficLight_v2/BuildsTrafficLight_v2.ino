@@ -14,8 +14,6 @@
 
 #include <TimerOne.h>
 
-LightTrafficSystem system = LightTrafficSystem(new ReadIdsState(), new InitSystemLightStrategy());
-
 void setup() {
 
 	pinMode(MODULE_RESET_PIN, OUTPUT);
@@ -53,6 +51,8 @@ void setup() {
 	Serial1.setTimeout(500);
 }
 
+LightTrafficSystem ltrSystem = LightTrafficSystem(new ReadIdsState(), new InitSystemLightStrategy());
+
 boolean isSetupMode = false;
 
 long counter = 0;
@@ -62,7 +62,7 @@ void routineProcess()
 {
 	if (counter > counterLimit)
 	{
-		system.lighting();
+		ltrSystem.lighting();
 		SoundManager.performPlayAction();
 		counter = 0;
 	}
@@ -133,7 +133,7 @@ void loop() {
 		String data = input.substring(1);
 		Serial.println(data);
 		switch (input.charAt(0))
-		{
+	{
 		case 'L':
 			Serial.println("LIGHT");
 			break;
@@ -150,15 +150,15 @@ void loop() {
 
 
 	
-}
+	}
 
 
 boolean validateInput(String input)
 {
 	if (input.length() < 4)
-	{
+			{
 		return false;
-	}
+			}
 	if (!input.startsWith("$"))
 	{
 		return false;
