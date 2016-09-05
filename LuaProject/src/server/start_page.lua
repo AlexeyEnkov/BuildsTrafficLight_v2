@@ -21,7 +21,6 @@ return function(c)
     end
 
     local first = true;
-    local f = require("fopen")
     local sf = require("send_file")
     local function sendId(c)
         sf(c, "ids", function(c) s(c, ";", sendConf) end)

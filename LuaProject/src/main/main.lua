@@ -1,6 +1,9 @@
 return function()
     tmr.stop(C.MAIN_TMR)
     local s = require("send_resp")
+    local q = require("queue")
+
+    print(node.heap())
 
     local function onEnd()
         require("clear")()
@@ -23,7 +26,7 @@ return function()
     end
 
     local function onUpdStatus(st)
-        -- check if changed
+        -- check if changed and change sound
         if st == C.B_SUCC then
             s("L5")
         elseif st == C.B_FAIL then
@@ -38,10 +41,11 @@ return function()
 
     local function onUpdateIdsCb(st)
         if st == C.OK then
-            if not pcall(require("status"), onUpdStatus, errCb) then
+            if not q(require("status"), onUpdStatus, errCb) then
                 onEnd()
             end
         else
+            _G["timeForNextUpdIds"] = 0;
             errCb(st)
         end
     end
@@ -60,7 +64,8 @@ return function()
             nextTime = now + step
         end
         _G["timeForNextUpdIds"] = nextTime
-        if not pcall(require("ids"), onUpdateIdsCb) then
+        if not q(require("ids"), onUpdateIdsCb) then
+            _G["timeForNextUpdIds"] = 0;
             onEnd()
         end
         print("upIds")

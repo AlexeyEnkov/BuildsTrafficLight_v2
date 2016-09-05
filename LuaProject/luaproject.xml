@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="luaproject" default="all">
 
-    <property file="luaproject.properties"/>
-
     <property name="base" value="${basedir}"/>
     <property name="build" value="${base}\build"/>
     <property name="src" value="${base}\src"/>
