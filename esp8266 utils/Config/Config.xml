@@ -22,7 +22,7 @@
   </Data>
   <Data name="FrameConfigLine1.FilePath">
     <Type>String</Type>
-    <Value>E:\_Arduino\Projects\BuildsTrafficLight_v2\esp8266 utils\ESP8266_NONOS_SDK_V1.5.4.1_patch_20160704\esp_init_data_default.bin</Value>
+    <Value>E:\_Arduino\Projects\BuildsTrafficLight_v2\esp8266 utils\esp_init_data_default.bin</Value>
   </Data>
   <Data name="FrameConfigLine1.Offset">
     <Type>String</Type>
@@ -34,7 +34,7 @@
   </Data>
   <Data name="FrameConfigLine2.FilePath">
     <Type>String</Type>
-    <Value>E:\_Arduino\Projects\BuildsTrafficLight_v2\esp8266 utils\9mods+debug.bin</Value>
+    <Value>E:\_Arduino\Projects\BuildsTrafficLight_v2\esp8266 utils\nodemcu-dev-7-modules-2016-09-05-19-59-06-integer.bin</Value>
   </Data>
   <Data name="FrameConfigLine2.Offset">
     <Type>String</Type>

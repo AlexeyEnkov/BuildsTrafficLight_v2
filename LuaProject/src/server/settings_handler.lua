@@ -62,7 +62,7 @@ return function(c, data, cb)
                 c:on("disconnection",
                     function(c)
                         if wifiChanged then
-                            --require("wifi_con")()
+                            require("wifi_con")()
                         end
                         require("send_conf")()
                     end)

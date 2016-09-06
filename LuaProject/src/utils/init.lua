@@ -18,8 +18,8 @@ end)
 C = require("constants")
 
 --init timer function for scheduling
-tmr.register(C.MAIN_TMR, 2000, tmr.ALARM_AUTO, function() pcall(node.task.post(require("main"))) end)
---tmr.start(C.MAIN_TMR)
+tmr.register(C.MAIN_TMR, 6000, tmr.ALARM_AUTO, require("main"))
+tmr.start(C.MAIN_TMR)
 require("send_conf")()
 local s = require("send_resp")
 s("L0")
