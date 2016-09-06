@@ -14,18 +14,16 @@ dt.ownIp=wifi.sta.getip()
 local ok, jsData = pcall(cjson.encode, dt)
 dt=nil
 if ok then
-s(c,"var rawData='"..jsData.."';</script>")
+s(c,"\"rawData\":"..jsData.."}")
 jsData=nil
 else
-s(c,"</script>")
+s(c,"\"rawData\":null}")
 end
 end
-local first=true;
-local f=require("fopen")
 local sf=require("send_file")
 local function sendId(c)
-    sf(c,"ids", function(c) s(c, ";", sendConf) end)
+    sf(c,"ids", function(c) s(c, ",", sendConf) end)
 end
-sf(c,"start_page.html",function(c) s(c, "<script type='text/javascript'>var IDS = ", sendId) end)
+s(c, "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n{\"IDS\":", sendId)
     if package.loaded[module] then package.loaded[module]=nil end
 end
