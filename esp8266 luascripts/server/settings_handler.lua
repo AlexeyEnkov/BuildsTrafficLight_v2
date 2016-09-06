@@ -1,11 +1,9 @@
 local module=...
 return function(c,data,cb)
-local rData=require("decode")(data)
-local _,_,rConf=string.find(rData, "config=(.+)")
 local succ=false
 local wifiChanged=false
-if rConf then
-    local k,nConf = pcall(cjson.decode,rConf) 
+if data then
+    local k,nConf = pcall(cjson.decode,data) 
     if k then 
         local oldC = {}
         oldC.ssid=nConf.ssid
@@ -44,10 +42,10 @@ end
 if package.loaded[module] then package.loaded[module]=nil end
 
 local snd=require("sender")
-local redirectJs="<script type='text/javascript'>setTimeout(function(){window.location.href='/'},2000);</script>"
+local headers = "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n"
 if succ then
-snd(c,"<div>Saved</div>"..redirectJs, function(c) c:close() c:on("disconnection",function(c) if wifiChanged then require("wifi_con")() end end) end )
+snd(c,headers.."{\"result\": \"OK\"}", function(c) c:close() c:on("disconnection",function(c) if wifiChanged then require("wifi_con")() end end) end )
 else
-snd(c,"<div>Err</div>"..redirectJs)
+snd(c,headers.."{\"result\": \"Err\"}", function(c) c:close() end)
 end
 end
