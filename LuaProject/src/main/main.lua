@@ -3,8 +3,6 @@ return function()
     local s = require("send_resp")
     local q = require("queue")
 
-    print(node.heap())
-
     local function onEnd()
         require("clear")()
         tmr.start(C.MAIN_TMR)

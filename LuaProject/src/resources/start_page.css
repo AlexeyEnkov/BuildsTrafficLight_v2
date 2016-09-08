@@ -1,0 +1,167 @@
+#cont {
+    margin-top: 100px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#left {
+    vertical-align: top;
+}
+
+#trl {
+    background: #222;
+    background-image: linear-gradient(transparent 3%, #111 30%);
+    width: 180px;
+    height: 460px;
+    border-radius: 10px;
+    position: relative;
+    border: solid 4px #333;
+}
+
+#trl > div.act {
+    opacity: 1;
+}
+
+#trl > div {
+    background-size: 5px 5px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    left: 30px;
+    position: absolute;
+    opacity: .4;
+}
+
+#r {
+    background: red;
+    background-image: radial-gradient(brown, transparent);
+    top: 25px;
+    box-shadow: 0 0 20px #111 inset,
+    0 0 10px red;
+}
+
+#y {
+    background: yellow;
+    background-image: radial-gradient(orange, transparent);
+    top: 170px;
+    box-shadow: 0 0 20px #111 inset,
+    0 0 10px yellow;
+}
+
+#g {
+    background: green;
+    background-image: radial-gradient(lime, transparent);
+    top: 315px;
+    box-shadow: 0 0 20px #111 inset,
+    0 0 10px lime;
+}
+
+#info {
+    text-align: left;
+    padding: 10px;
+    border: 1px solid gainsboro;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    margin-top: 15px;
+}
+
+#info div {
+    margin-top: 5px;
+}
+
+#cid {
+    font-size: 18px;
+    color: #ff0303;
+}
+
+#ip {
+}
+
+#right {
+    font-size: 20px;
+    padding-left: 60px;
+}
+
+#right input {
+    font-size: 18px;
+    outline: none;
+    color: #3a3a3a;
+    border: solid 1px gainsboro;
+    border-radius: 5px;
+    padding: 4px;
+    margin-top: 2px;
+}
+
+#wifi input {
+    width: 110px;
+}
+
+#wifi input[name="ssid"] {
+    margin-right: 10px;
+}
+
+#host input[name="ip"] {
+    width: 130px;
+    margin-right: 10px;
+}
+
+#host input[name="port"] {
+    width: 50px;
+}
+
+#bright input {
+    width: 35px;
+}
+
+#bright span {
+    padding-right: 10px;
+}
+
+#wifi, #bright, #host, #sound {
+    margin-bottom: 15px;
+}
+
+#sound input,
+#ids input {
+    top: 1px;
+    margin-left: 10px;
+    position: relative;
+}
+
+#idscont {
+    margin-top: 10px;
+    height: 160px;
+    overflow: auto;
+    color: #5a5a5a;
+    border: 1px solid gainsboro;
+    border-radius: 2px;
+}
+
+#idscont label {
+    display: block;
+    margin-top: 2px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+#idscont div {
+    width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    float: left;
+}
+
+#save {
+    font-size: 20px;
+    height: 25px;
+    width: 70px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    text-align: center;
+    cursor: pointer;
+    color: #0000b3;
+    border: 1px solid gainsboro;
+    border-radius: 2px;
+}

@@ -1,12 +1,15 @@
 return function(c, fname, cb)
     local send = require("sender")
-    --local f = require("fopen")
-    local function sfile(c)
-        local k, buf = pcall(file.read)
-        if k and buf then
-            send(c, buf, sfile)
+    local fileBuffer = {}
+
+    local function sbuff(c)
+        if (#fileBuffer > 0) then
+            local part = table.remove(fileBuffer, 1)
+            print("part")
+            send(c, part, sbuff)
         else
-            file.close()
+            print("file end")
+            fileBuffer = nil
             if cb then
                 cb(c)
             else
@@ -14,7 +17,14 @@ return function(c, fname, cb)
             end
         end
     end
+
     file.open(fname)
-    sfile(c)
-    --f.open(fname, function() sfile(c) end)
+    local k, buf = pcall(file.read)
+    while k and buf do
+        fileBuffer[#fileBuffer + 1] = buf
+        k, buf = pcall(file.read)
+        if (not k) then print("bad bad") end
+    end
+    file.close()
+    sbuff(c)
 end
