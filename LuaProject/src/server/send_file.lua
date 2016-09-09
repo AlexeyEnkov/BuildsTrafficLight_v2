@@ -4,7 +4,7 @@ return function(c, fname, cb)
 
     --[[local ind = 1;
     local function sbuff(c)
-        print("part")
+            print("part")
         if (ind <= #fileBuffer) then
             local part = fileBuffer[ind] --table.remove(fileBuffer, 1)
             fileBuffer[ind] = nil
@@ -21,6 +21,7 @@ return function(c, fname, cb)
         end
     end]]
 
+    print("file open: " .. fname)
     file.open(fname)
     local k, buf = pcall(file.read)
     while k and buf do
@@ -50,4 +51,6 @@ return function(c, fname, cb)
         end)
     tmr.start(3)
     --sbuff(c)
+    print("file close: " .. fname)
+    sbuff(c)
 end
