@@ -14,7 +14,7 @@ return function(c)
         dt = nil
         if ok then
             s(c, "\"rawData\":" .. jsData .. "}")
-            jsData = nil
+--            jsData = nil
         else
             s(c, "\"rawData\":null}")
         end

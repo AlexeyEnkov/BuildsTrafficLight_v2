@@ -1,5 +1,6 @@
 uart.setup(0, 115200, 8, uart.PARITY_NONE, uart.STOPBITS_1, 0)
 wifi.setmode(wifi.STATIONAP)
+wifi.setphymode(wifi.PHYMODE_G)
 wifi.sta.setmac("CE:A4:62:99:CF:75")
 wifi.sta.autoconnect(0)
 -- init ap with server
@@ -10,17 +11,17 @@ wifi.ap.setip({ ip = "192.168.1.1", netmask = "255.255.255.0", gateway = "192.16
 
 require("wifi_con")()
 
-collectgarbage("setpause", 110)
-collectgarbage("setstepmul", 50)
+--collectgarbage("setpause", 110)
+--collectgarbage("setstepmul", 50)
 
-local dataPool = {}
+dataPool = {}
 local srv = net.createServer(net.TCP)
 srv:listen(80, function(conn)
     require("clear")()
     collectgarbage()
     conn:on("receive",
         function(conn, req)
-            print("recieve", node.heap())
+            print("receive conn=", conn, "heap=", node.heap())
             dataPool[#dataPool + 1] = { c=conn, r=req }
             if (#dataPool == 1) then
                 dataPool[1].c=nil
@@ -31,12 +32,12 @@ srv:listen(80, function(conn)
     conn:on("disconnection",
         function(c)
             collectgarbage("restart")
-            print("close", node.heap())
+            print("close conn=", conn, "heap=", node.heap())
             table.remove(dataPool, 1)
             if (#dataPool > 0) then
                 require("server")(dataPool[1].c, dataPool[1].r)
-                dataPool[1].c=nil
-                dataPool[1].req=nil
+--                dataPool[1].c=nil
+--                dataPool[1].req=nil
             end
             require("clear")()
         end)

@@ -2,6 +2,7 @@ return function(c, data, cb)
     local succ = false
     local wifiChanged = false
 
+    print(data)
     if data then
         local k, updConf = pcall(cjson.decode,data)
         if k then
@@ -55,7 +56,7 @@ return function(c, data, cb)
     local snd = require("sender")
     local headers = "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n"
     if succ then
-        snd(c, headers .. "{\"result\": \"OK\"}",
+        snd(c, headers .. "{\"result\": \"OK\"}"--[[,
             function(c)
                 c:close()
                 c:on("disconnection",
@@ -65,8 +66,8 @@ return function(c, data, cb)
                         end
                         require("send_conf")()
                     end)
-            end)
+            end]])
     else
-        snd(c, headers, "{\"result\": \"Err\"}")
+        snd(c, headers .. "{\"result\": \"Err\"}")
     end
 end

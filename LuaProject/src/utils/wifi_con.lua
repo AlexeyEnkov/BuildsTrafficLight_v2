@@ -9,6 +9,7 @@ return function(scb, ecb)
     local function succb()
         wifi.sta.eventMonStop(1)
         if scb then scb() end
+        print("succb")
     end
 
     wifi.sta.eventMonReg(wifi.STA_GOTIP, function() succb() end)
