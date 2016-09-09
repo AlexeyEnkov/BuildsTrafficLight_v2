@@ -14,7 +14,7 @@ return function(c)
         dt = nil
         if ok then
             s(c, "\"rawData\":" .. jsData .. "}")
-            jsData = nil
+--            jsData = nil
         else
             s(c, "\"rawData\":null}")
         end
@@ -24,6 +24,5 @@ return function(c)
     local function sendId(c)
         sf(c, "ids", function(c) s(c, ",", sendConf) end)
     end
-
     s(c, "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n{\"IDS\":", sendId)
 end

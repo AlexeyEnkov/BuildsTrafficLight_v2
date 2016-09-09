@@ -80,15 +80,15 @@ LTR.prototype = {
         var r = d.getElementById("r");
         var y = d.getElementById("y");
         var g = d.getElementById("g");
-        switch (data["status"]) {
-            case "SUCC":
+        switch (data["status"]) {//TODO: constants (same as in constants.lua)
+            case 1:
                 g.className = "act";
                 break;
-            case "RUN":
+            case 3:
                 r.className = "act";
                 y.className = "act";
                 break;
-            case "FAIL":
+            case 2:
                 r.className = "act";
                 d.getElementById("cid").textContent = "Failed build: " + data["targetId"];
                 break;

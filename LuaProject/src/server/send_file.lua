@@ -18,6 +18,7 @@ return function(c, fname, cb)
         end
     end
 
+    print("file open: " .. fname)
     file.open(fname)
     local k, buf = pcall(file.read)
     while k and buf do
@@ -26,5 +27,6 @@ return function(c, fname, cb)
         if (not k) then print("bad bad") end
     end
     file.close()
+    print("file close: " .. fname)
     sbuff(c)
 end
