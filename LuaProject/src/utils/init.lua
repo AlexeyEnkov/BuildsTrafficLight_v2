@@ -10,22 +10,19 @@ wifi.ap.setip({ ip = "192.168.1.1", netmask = "255.255.255.0", gateway = "192.16
 
 require("wifi_con")()
 
-collectgarbage("setpause", 110)
-collectgarbage("setstepmul", 50)
-
 local dataPool = {}
 local srv = net.createServer(net.TCP)
 srv:listen(80, function(conn)
     require("clear")()
-    collectgarbage()
+    collectgarbage("restart")
     conn:on("receive",
         function(conn, req)
             print("recieve", node.heap())
-            dataPool[#dataPool + 1] = { c=conn, r=req }
+            dataPool[#dataPool + 1] = { c = conn, r = req }
             if (#dataPool == 1) then
-                dataPool[1].c=nil
-                dataPool[1].req=nil
-                require("server")(conn, req)
+                dataPool[1].c = nil
+                dataPool[1].req = nil
+                print(pcall(require("server"), conn, req))
             end
         end)
     conn:on("disconnection",
@@ -34,11 +31,8 @@ srv:listen(80, function(conn)
             print("close", node.heap())
             table.remove(dataPool, 1)
             if (#dataPool > 0) then
-                require("server")(dataPool[1].c, dataPool[1].r)
-                dataPool[1].c=nil
-                dataPool[1].req=nil
+                pcall(require("server"), dataPool[1].c, dataPool[1].r)
             end
-            require("clear")()
         end)
 end)
 
@@ -50,4 +44,4 @@ require("send_conf")()
 local s = require("send_resp")
 s("L0")
 s("S0")
-s=nil
+s = nil

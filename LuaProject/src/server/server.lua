@@ -34,6 +34,4 @@ return function(c, request)
     else
         sendfile(c, "start_page.html")
     end
-
-    require("clear")()
 end

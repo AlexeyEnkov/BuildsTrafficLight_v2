@@ -2,21 +2,24 @@ return function(c, fname, cb)
     local send = require("sender")
     local fileBuffer = {}
 
+    --[[local ind = 1;
     local function sbuff(c)
-        if (#fileBuffer > 0) then
-            local part = table.remove(fileBuffer, 1)
-            print("part")
+        print("part")
+        if (ind <= #fileBuffer) then
+            local part = fileBuffer[ind] --table.remove(fileBuffer, 1)
+            fileBuffer[ind] = nil
+            ind = ind + 1;
             send(c, part, sbuff)
         else
             print("file end")
             fileBuffer = nil
             if cb then
-                cb(c)
+                print(pcall(cb, c))
             else
                 c:close()
             end
         end
-    end
+    end]]
 
     file.open(fname)
     local k, buf = pcall(file.read)
@@ -26,5 +29,25 @@ return function(c, fname, cb)
         if (not k) then print("bad bad") end
     end
     file.close()
-    sbuff(c)
+
+    local busy = false
+    c:on("sent", function() busy = false end)
+    tmr.register(3, 10, tmr.ALARM_AUTO,
+        function()
+            if not busy then
+                if (#fileBuffer > 0) then
+                    busy = true
+                    c:send(table.remove(fileBuffer, 1))
+                else
+                    tmr.unregister(3)
+                    if cb then
+                        cb(c)
+                    else
+                        c:close()
+                    end
+                end
+            end
+        end)
+    tmr.start(3)
+    --sbuff(c)
 end
