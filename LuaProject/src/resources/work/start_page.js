@@ -59,16 +59,20 @@ LTR.prototype = {
         return cfg;
     },
     save: function () {
-        var f = d.createElement("form");
-        d.querySelector("body").appendChild(f);
-        f.method = "POST";
-        f.action = "/settings";
-        var inp = d.createElement("input");
-        inp.hidden = true;
-        inp.name = "config";
-        inp.value = JSON.stringify(this.getCfg());
-        f.appendChild(inp);
-        f.submit();
+        fetch("/settings", {
+            method: "POST",
+            body: JSON.stringify(this.getCfg())
+        })
+            .then(
+                function(response) {
+                    console.log(response["status"]);
+                    return response.json();
+                }
+            ).then(
+            function(data) {
+                console.log(data);
+            }
+        )
     },
     setUpInf: function (data) {
         d.getElementById("ip").textContent = "Wifi: " + (data["ownIp"] ? "connected. Local ip: " + data["ownIp"] : "not connected.");
@@ -76,15 +80,15 @@ LTR.prototype = {
         var r = d.getElementById("r");
         var y = d.getElementById("y");
         var g = d.getElementById("g");
-        switch (data["status"]) {
-            case "SUCC":
+        switch (data["status"]) {//TODO: constants (same as in constants.lua)
+            case 1:
                 g.className = "act";
                 break;
-            case "RUN":
+            case 3:
                 r.className = "act";
                 y.className = "act";
                 break;
-            case "FAIL":
+            case 2:
                 r.className = "act";
                 d.getElementById("cid").textContent = "Failed build: " + data["targetId"];
                 break;
@@ -92,6 +96,18 @@ LTR.prototype = {
     }
 };
 
-window.onload = function () {
-    new LTR(IDS, JSON.parse(rawData));
+window.onload = function() {
+    fetch("/settings")
+        .then(
+            function(response) {
+                console.log(response["status"]);
+                return response.json();
+            }
+        )
+        .then(
+            function(data) {
+                console.log(data);
+                new LTR(data["IDS"],data["rawData"]);
+            }
+        )
 };

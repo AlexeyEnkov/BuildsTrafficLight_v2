@@ -22,7 +22,7 @@ return function(c)
 
     local sf = require("send_file")
     local function sendId(c)
-        sf(c, "ids"--[[, function(c) s(c, ",", sendConf) end]])
+        sf(c, "ids", function(c) s(c, ",", sendConf) end)
     end
     s(c, "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n{\"IDS\":", sendId)
 end

@@ -1,12 +1,4 @@
 return function(c, request)
-    print(request)
-    local q = require("queue")
---    if bodyHandler then
---        q(bodyHandler, c, request)
-----        bodyHandler = nil
-----        request = nil
---        return
---    end
     local _, _, method, path, vars = string.find(request, "([A-Z]+) (.+)?(.+) HTTP")
     if (method == nil) then
         _, _, method, path = string.find(request, "([A-Z]+) (.+) HTTP")

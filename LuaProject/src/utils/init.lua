@@ -40,7 +40,7 @@ end)
 
 C = require("constants")
 --init timer function for scheduling
-tmr.register(C.MAIN_TMR, 6000, tmr.ALARM_AUTO, require("main"))
+--tmr.register(C.MAIN_TMR, 6000, tmr.ALARM_AUTO, require("main"))
 --tmr.start(C.MAIN_TMR)
 require("send_conf")()
 local s = require("send_resp")

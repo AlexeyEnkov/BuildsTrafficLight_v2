@@ -30,6 +30,7 @@ return function(c, fname, cb)
         if (not k) then print("bad bad") end
     end
     file.close()
+    print("file close: " .. fname)
 
     local busy = false
     c:on("sent", function() busy = false end)
@@ -51,6 +52,4 @@ return function(c, fname, cb)
         end)
     tmr.start(3)
     --sbuff(c)
-    print("file close: " .. fname)
-    sbuff(c)
 end
