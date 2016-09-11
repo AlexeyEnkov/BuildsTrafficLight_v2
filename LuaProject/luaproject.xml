@@ -6,7 +6,7 @@
     <property name="src" value="${base}\src"/>
 
     <target name="clear">
-        <delete includeemptydirs="true">
+        <delete includeemptydirs="true" failonerror="0">
             <fileset dir="${build}" includes="**\*"/>
         </delete>
     </target>

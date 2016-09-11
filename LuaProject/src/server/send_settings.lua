@@ -24,5 +24,6 @@ return function(c)
     local function sendId(c)
         sf(c, "ids", function(c) s(c, ",", sendConf) end)
     end
-    s(c, "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n{\"IDS\":", sendId)
+
+    s(c, "{\"IDS\":", sendId)
 end

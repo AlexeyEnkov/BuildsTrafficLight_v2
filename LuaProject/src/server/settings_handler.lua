@@ -2,7 +2,7 @@ return function(c, data, cb)
     local succ = false
     local wifiChanged = false
 
-    print(data)
+    data = require("decode")(data)
     if data then
         local k, updConf = pcall(cjson.decode,data)
         if k then
