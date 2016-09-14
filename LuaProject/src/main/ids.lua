@@ -5,9 +5,9 @@ return function(cb)
             "Accept: application/json\r\n",
             function(code, data)
                 local function safe(code, data)
-                    local st = C.OK
+                    local st = _C.OK
                     if (code ~= 200) then
-                        if (code < 0) then st = C.C_ERR else st = C.R_ERR end
+                        if (code < 0) then st = _C.C_ERR else st = _C.R_ERR end
                     else
                         local jIds = cjson.decode(data)
                         data = nil
@@ -50,11 +50,11 @@ return function(cb)
 
                 local res = pcall(safe, code, data)
                 if (not res) then
-                    cb(C.P_ERR)
+                    cb(_C.P_ERR)
                 end
             end)
     else
-        cb(C.WIFI_ERR)
+        cb(_C.WIFI_ERR)
     end
 end
 

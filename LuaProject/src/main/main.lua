@@ -1,23 +1,28 @@
 return function()
-    tmr.stop(C.MAIN_TMR)
-    local s = require("send_resp")
-    local q = require("queue")
+    tmr.stop(_C.MAIN_TMR)
+
+    if wifi.sta.status() ~= wifi.STA_GOTIP then
+        loadScript("wifi_con")()
+    end
+
+    local s = loadScript("send_resp")
 
     local function onEnd()
         require("clear")()
-        tmr.start(C.MAIN_TMR)
+        tmr.start(_C.MAIN_TMR)
     end
 
     local function errCb(st)
-        if st == C.WIFI_ERR then
+        if st == _C.WIFI_ERR then
             s("L3")
-        elseif st == C.ERR then
+        elseif st == _C.ERR then
             s("L1")
-        elseif st == C.ERR then
+        elseif st == _C.ERR then
             s("L2")
         else
             -- P_ERR
             print(st)
+            node.restart()
         end
 
         onEnd()
@@ -25,9 +30,9 @@ return function()
 
     local function onUpdStatus(st)
         -- check if changed and change sound
-        if st == C.B_SUCC then
+        if st == _C.B_SUCC then
             s("L5")
-        elseif st == C.B_FAIL then
+        elseif st == _C.B_FAIL then
             s("L4")
         else
             s("L6")
@@ -38,10 +43,8 @@ return function()
     end
 
     local function onUpdateIdsCb(st)
-        if st == C.OK then
-            if not q(require("status"), onUpdStatus, errCb) then
-                onEnd()
-            end
+        if st == _C.OK then
+            require("status")(onUpdStatus, errCb)
         else
             _G["timeForNextUpdIds"] = 0;
             errCb(st)
@@ -51,8 +54,8 @@ return function()
     local timeForUpdIds = _G["timeForNextUpdIds"]
     if not timeForUpdIds then timeForUpdIds = 0 end
 
-    local now = tmr.now()
-    local step = 1000 * 1000 * 30;
+    local now = tmr.time() -- time in seconds
+    local step = 30;
     local max = 2147483647;
     if timeForUpdIds < now then
         local nextTime = 0;
@@ -62,12 +65,9 @@ return function()
             nextTime = now + step
         end
         _G["timeForNextUpdIds"] = nextTime
-        if not q(require("ids"), onUpdateIdsCb) then
-            _G["timeForNextUpdIds"] = 0;
-            onEnd()
-        end
+        require("ids")(onUpdateIdsCb)
         print("upIds")
     else
-        onUpdateIdsCb(C.OK)
+        onUpdateIdsCb(_C.OK)
     end
 end

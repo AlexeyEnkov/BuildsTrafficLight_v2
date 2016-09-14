@@ -1,55 +1,35 @@
-return function(c, fname, cb)
-    local send = require("sender")
-    local fileBuffer = {}
+local c, fname, cb = ...
 
-    --[[local ind = 1;
-    local function sbuff(c)
-            print("part")
-        if (ind <= #fileBuffer) then
-            local part = fileBuffer[ind] --table.remove(fileBuffer, 1)
-            fileBuffer[ind] = nil
-            ind = ind + 1;
-            send(c, part, sbuff)
+local fileBuffer = {}
+local busyFileSend = false
+
+file.open(fname)
+local k, buf = pcall(file.read)
+while k and buf do
+    fileBuffer[#fileBuffer + 1] = buf
+    k, buf = pcall(file.read)
+    if (not k) then print("can not read file: ", fname) end
+end
+file.close()
+
+local function sendProcess()
+    if not busyFileSend then
+        if (#fileBuffer > 0) then
+            busyFileSend = true
+            local part = table.remove(fileBuffer, 1)
+            c:send(part)
+            tmr.wdclr()
         else
-            print("file end")
-            fileBuffer = nil
+            tmr.unregister(3)
             if cb then
-                print(pcall(cb, c))
+                cb(c)
             else
                 c:close()
             end
         end
-    end]]
-
-    print("file open: " .. fname)
-    file.open(fname)
-    local k, buf = pcall(file.read)
-    while k and buf do
-        fileBuffer[#fileBuffer + 1] = buf
-        k, buf = pcall(file.read)
-        if (not k) then print("bad bad") end
     end
-    file.close()
-    print("file close: " .. fname)
-
-    local busy = false
-    c:on("sent", function() busy = false end)
-    tmr.register(3, 10, tmr.ALARM_AUTO,
-        function()
-            if not busy then
-                if (#fileBuffer > 0) then
-                    busy = true
-                    c:send(table.remove(fileBuffer, 1))
-                else
-                    tmr.unregister(3)
-                    if cb then
-                        cb(c)
-                    else
-                        c:close()
-                    end
-                end
-            end
-        end)
-    tmr.start(3)
-    --sbuff(c)
 end
+
+c:on("sent", function() busyFileSend = false end)
+tmr.register(3, 50, tmr.ALARM_AUTO, sendProcess)
+tmr.start(3)

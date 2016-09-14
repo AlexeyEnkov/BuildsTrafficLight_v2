@@ -1,1 +1,2 @@
-return function(r) print("$"..r.."$") end
+local data = r
+print("$"..r.."$")

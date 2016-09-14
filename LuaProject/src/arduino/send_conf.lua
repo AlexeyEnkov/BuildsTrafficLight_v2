@@ -7,6 +7,6 @@ return function()
     if _G["cfg"].sound ~= nil then
         resp = resp .. "sound=" .. (_G["cfg"].sound and "1" or "0") .. ";"
     end
-    require("send_resp")("C" .. resp)
+    loadScript("send_resp")("C" .. resp)
 end
 
