@@ -3,7 +3,7 @@ local c, fname, cb = ...
 local fileBuffer = {}
 local busyFileSend = false
 
-file.open(fname)
+pcall(file.open(fname))
 local k, buf = pcall(file.read)
 while k and buf do
     fileBuffer[#fileBuffer + 1] = buf
@@ -13,12 +13,12 @@ end
 file.close()
 
 local function sendProcess()
+    tmr.wdclr()
     if not busyFileSend then
         if (#fileBuffer > 0) then
             busyFileSend = true
             local part = table.remove(fileBuffer, 1)
             c:send(part)
-            tmr.wdclr()
         else
             tmr.unregister(3)
             if cb then
@@ -30,6 +30,6 @@ local function sendProcess()
     end
 end
 
-c:on("sent", function() busyFileSend = false end)
-tmr.register(3, 50, tmr.ALARM_AUTO, sendProcess)
+c:on("sent", function(c) tmr.wdclr() busyFileSend = false end)
+tmr.register(3, 10, tmr.ALARM_AUTO, sendProcess)
 tmr.start(3)

@@ -25,24 +25,12 @@
     <Filter Include="Source Files\utils">
       <UniqueIdentifier>{0156ad27-3b81-4470-874f-5b36f033f735}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\states">
-      <UniqueIdentifier>{5a5728bd-07a6-4779-bbf6-4df77fbcc431}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\states">
-      <UniqueIdentifier>{2182e6a0-3f00-4710-9f66-4d2cd5e0d452}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="BuildsTrafficLight_v2.ino" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.BuildsTrafficLight_v2.vsarduino.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="SystemState.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LightTrafficSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BasicLightStrategy.h">
@@ -69,29 +57,14 @@
     <ClInclude Include="WiFiConnectionErrorLightStrategy.h">
       <Filter>Header Files\lightstrategies</Filter>
     </ClInclude>
-    <ClInclude Include="BuildServerCheckingState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="ResetModuleState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
-    <ClInclude Include="ReadDataOfIdsState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
     <ClInclude Include="TestLightStrategy.h">
       <Filter>Header Files\lightstrategies</Filter>
     </ClInclude>
     <ClInclude Include="WifiModuleUtils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
-    <ClInclude Include="ReadIdsState.h">
-      <Filter>Header Files\states</Filter>
-    </ClInclude>
     <ClInclude Include="SystemUtils.h">
       <Filter>Header Files\utils</Filter>
-    </ClInclude>
-    <ClInclude Include="TestConnectToWiFiState.h">
-      <Filter>Header Files\states</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>Header Files\utils</Filter>
@@ -107,12 +80,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="LightTrafficSystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="SystemState.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BasicLightStrategy.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -137,29 +104,14 @@
     <ClCompile Include="WiFiConnectionErrorLightStrategy.cpp">
       <Filter>Source Files\lightstrategies</Filter>
     </ClCompile>
-    <ClCompile Include="BuildServerCheckingState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="ReadDataOfIdsState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
-    <ClCompile Include="ResetModuleState.cpp">
-      <Filter>Source Files\states</Filter>
-    </ClCompile>
     <ClCompile Include="TestLightStrategy.cpp">
       <Filter>Source Files\lightstrategies</Filter>
-    </ClCompile>
-    <ClCompile Include="ReadIdsState.cpp">
-      <Filter>Source Files\states</Filter>
     </ClCompile>
     <ClCompile Include="SystemUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
     <ClCompile Include="WifiModuleUtils.cpp">
       <Filter>Source Files\utils</Filter>
-    </ClCompile>
-    <ClCompile Include="TestConnectToWiFiState.cpp">
-      <Filter>Source Files\states</Filter>
     </ClCompile>
     <ClCompile Include="SoundManager.cpp">
       <Filter>Source Files\utils</Filter>

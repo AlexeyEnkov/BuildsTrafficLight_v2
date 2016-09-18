@@ -60,14 +60,14 @@ void WifiModuleUtils::runScript(String scriptName)
 
 String WifiModuleUtils::readResponce(int timeOut)
 {
-	String resp = F("RESP_ERR");
+	String resp = "";
 	boolean isReadState = false;
 	char c;
 	moduleStream->setTimeout(timeOut);
 	if (moduleStream->find("$"))
 	{
 		moduleStream->setTimeout(500);
-		resp = moduleStream->readStringUntil('\r');
+		resp = moduleStream->readStringUntil('$');
 		resp.trim();
 	}
 	/*while (respTimeout > 0)

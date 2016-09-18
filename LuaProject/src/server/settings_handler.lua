@@ -55,10 +55,11 @@ local snd = loadScript("sender")
 local headers = "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n"
 if succ then
     loadScript("send_conf")()
-    snd(c, headers .. "{\"result\": \"OK\"}", function()
+    snd(c, headers .. "{\"result\": \"OK\"}", function(c)
         if wifiChanged then
             loadScript("wifi_con")()
         end
+        c:close()
     end)
 else
     snd(c, headers .. "{\"result\": \"Err\"}")

@@ -1,13 +1,13 @@
---node.egc.setmode(node.egc.NOT_ACTIVE)
+node.egc.setmode(node.egc.NOT_ACTIVE)
 node.setcpufreq(node.CPU160MHZ)
 
 uart.setup(0, 115200, 8, uart.PARITY_NONE, uart.STOPBITS_1, 0)
 
 wifi.setmode(wifi.STATIONAP)
 --wifi.setmode(wifi.STATION)
-wifi.setphymode(wifi.PHYMODE_N)
+wifi.setphymode(wifi.PHYMODE_G)
 wifi.sta.setmac("CE:A4:62:99:CF:75")
-wifi.sta.autoconnect(0)
+wifi.sta.autoconnect(1)
 
 -- precompile files (did not working)
 --[[for k, v in pairs(file.list()) do
@@ -26,29 +26,31 @@ function loadScript(script)
     return assert(loadfile(script .. ".lua"))
 end
 
-dofile("init_cfg.lua")
 _CP = {}
+function cPoolSize()
+    local ind = 0;
+    for k, _ in pairs(_CP) do
+        ind = ind + 1;
+    end
+    return ind
+end
+
+dofile("init_cfg.lua")
 _C = require("constants")
+
 _WIFI_LOCK = false
+_MAIN_LOCK = false
 
 wifi.ap.config({ ssid = "trafficlight", pwd = "trafficlight" })
 wifi.ap.setip({ ip = "192.168.1.1", netmask = "255.255.255.0", gateway = "192.168.1.1" })
 
--- store CON, PATH, BODY
-local srv = net.createServer(net.TCP)
-srv:listen(80, function(c)
-    loadScript("server_listener")(c)
-end)
+loadScript("init_server")()
 
 --init timer function for scheduling
 _MAIN_CO = coroutine.create(function()
     while true do
-        local ind = 0;
-        for k, _ in pairs(_CP) do
-            ind = ind + 1;
-        end
-        if (ind == 0) then
-            require("main")()
+        if (cPoolSize() == 0) then
+            loadScript("main")()
         end
         coroutine.yield()
     end
@@ -58,7 +60,6 @@ tmr.register(_C.MAIN_TMR, 6000, tmr.ALARM_AUTO, function() coroutine.resume(_MAI
 -- start connect to wifi
 local function mainStart()
     coroutine.resume(_MAIN_CO)
-    tmr.start(_C.MAIN_TMR)
 end
 
 loadScript("wifi_con")(mainStart, mainStart)

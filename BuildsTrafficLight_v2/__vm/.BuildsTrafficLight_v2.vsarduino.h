@@ -68,8 +68,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <..\BuildsTrafficLight_v2\BuildsTrafficLight_v2.ino>
 #include <..\BuildsTrafficLight_v2\BasicLightStrategy.cpp>
 #include <..\BuildsTrafficLight_v2\BasicLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\BuildServerCheckingState.cpp>
-#include <..\BuildsTrafficLight_v2\BuildServerCheckingState.h>
 #include <..\BuildsTrafficLight_v2\BuildServerErrorLightStrategy.cpp>
 #include <..\BuildsTrafficLight_v2\BuildServerErrorLightStrategy.h>
 #include <..\BuildsTrafficLight_v2\BuildServerRequestErrorLightStrategy.cpp>
@@ -82,14 +80,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <..\BuildsTrafficLight_v2\BuildsSuccessLightStrategy.h>
 #include <..\BuildsTrafficLight_v2\InitSystemLightStrategy.cpp>
 #include <..\BuildsTrafficLight_v2\InitSystemLightStrategy.h>
-#include <..\BuildsTrafficLight_v2\LightTrafficSystem.cpp>
-#include <..\BuildsTrafficLight_v2\LightTrafficSystem.h>
-#include <..\BuildsTrafficLight_v2\ReadDataOfIdsState.cpp>
-#include <..\BuildsTrafficLight_v2\ReadDataOfIdsState.h>
-#include <..\BuildsTrafficLight_v2\ReadIdsState.cpp>
-#include <..\BuildsTrafficLight_v2\ReadIdsState.h>
-#include <..\BuildsTrafficLight_v2\ResetModuleState.cpp>
-#include <..\BuildsTrafficLight_v2\ResetModuleState.h>
 #include <..\BuildsTrafficLight_v2\RtttlPlayer.cpp>
 #include <..\BuildsTrafficLight_v2\RtttlPlayer.h>
 #include <..\BuildsTrafficLight_v2\SoundManager.cpp>
@@ -98,12 +88,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <..\BuildsTrafficLight_v2\SystemConfig.h>
 #include <..\BuildsTrafficLight_v2\SystemConfigHelper.cpp>
 #include <..\BuildsTrafficLight_v2\SystemConfigHelper.h>
-#include <..\BuildsTrafficLight_v2\SystemState.cpp>
-#include <..\BuildsTrafficLight_v2\SystemState.h>
 #include <..\BuildsTrafficLight_v2\SystemUtils.cpp>
 #include <..\BuildsTrafficLight_v2\SystemUtils.h>
-#include <..\BuildsTrafficLight_v2\TestConnectToWiFiState.cpp>
-#include <..\BuildsTrafficLight_v2\TestConnectToWiFiState.h>
 #include <..\BuildsTrafficLight_v2\TestLightStrategy.cpp>
 #include <..\BuildsTrafficLight_v2\TestLightStrategy.h>
 #include <..\BuildsTrafficLight_v2\WiFiConnectionErrorLightStrategy.cpp>

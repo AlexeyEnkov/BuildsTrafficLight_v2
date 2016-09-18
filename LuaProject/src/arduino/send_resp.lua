@@ -1,2 +1,2 @@
-local data = r
-print("$"..r.."$")
+local data = ...
+print("$"..data.."$")

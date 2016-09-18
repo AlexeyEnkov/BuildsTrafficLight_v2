@@ -6,6 +6,7 @@
 #include <avr/pgmspace.h>
 
 const PROGMEM unsigned int notes[] = { 0,
+NOTE_C2, NOTE_CS2, NOTE_D2, NOTE_DS2, NOTE_E2, NOTE_F2, NOTE_FS2, NOTE_G2, NOTE_GS2, NOTE_A2, NOTE_AS2, NOTE_B2,
 NOTE_C3, NOTE_CS3, NOTE_D3, NOTE_DS3, NOTE_E3, NOTE_F3, NOTE_FS3, NOTE_G3, NOTE_GS3, NOTE_A3, NOTE_AS3, NOTE_B3,
 NOTE_C4, NOTE_CS4, NOTE_D4, NOTE_DS4, NOTE_E4, NOTE_F4, NOTE_FS4, NOTE_G4, NOTE_GS4, NOTE_A4, NOTE_AS4, NOTE_B4,
 NOTE_C5, NOTE_CS5, NOTE_D5, NOTE_DS5, NOTE_E5, NOTE_F5, NOTE_FS5, NOTE_G5, NOTE_GS5, NOTE_A5, NOTE_AS5, NOTE_B5,
@@ -206,7 +207,7 @@ void RtttlPlayerClass::nextnote()
 
 	if (note)
 	{
-		tone(pin, pgm_read_word_near(notes + ((scale - 3) * 12 + note)), duration); //3 it is magic constants that shows not used octaves
+		tone(pin, pgm_read_word_near(notes + ((scale - 2) * 12 + note)), duration); //3 it is magic constants that shows not used octaves
 //		tone(pin, notes[(scale - 4) * 12 + note], duration);
 		
 		noteDelay = millis() + (duration + 1);

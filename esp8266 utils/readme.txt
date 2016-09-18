@@ -1,0 +1,1 @@
+The address for esp_init_data_default.bin depends on the size of your module's flash. ESP-01, -03, -07 etc. with 512 kByte flash require 0x7c000. Init data goes to 0x3fc000 on an ESP-12E with 4 MByte flash.

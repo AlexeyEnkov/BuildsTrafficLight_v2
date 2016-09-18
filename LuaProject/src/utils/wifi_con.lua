@@ -4,6 +4,7 @@ if _WIFI_LOCK then
 end
 _WIFI_LOCK = true
 local function ercb()
+    wifi.sta.eventMonStop(1)
     wifi.setmode(wifi.SOFTAP)
     if ecb then ecb() end
     print("errccb")
