@@ -1,17 +1,20 @@
 local conn = ...
 print("new connection ", conn)
-_CP[conn] = {}
 conn:on("receive",
     function(conn, req)
-        if _MAIN_LOCK then
+        if _WIFI_LOCK then -- may be need add _M_LOCK
             conn:close()
             print("sorry")
+            return
         end
-        tmr.wdclr()
+
+        if not _CP[conn] then
+            _CP[conn] = {}
+        end
+
         print("recieved", conn)
         local data = _CP[conn]
         if data ~= nil and data.needBody then
-            --print("recieved body", req)
             data.body = req
             data.needBody = false
         else
@@ -19,8 +22,6 @@ conn:on("receive",
             if (method == nil) then
                 _, _, method, path = string.find(req, "([A-Z]+) (.+) HTTP")
             end
-            --data = {}
-            --_CP[conn] = data
             data.method = method
             data.path = path
             if (method == "POST") then
@@ -29,29 +30,16 @@ conn:on("receive",
                     data.body = body
                 else
                     data.needBody = true
-                    --print("need to find body")
                     return -- wait data
                 end
             end
         end
 
         if (cPoolSize() == 1) then
-            loadScript("server")(conn, data)
+            coroutine.resume(_SERVER_CO)
         end
     end)
 conn:on("disconnection",
     function(conn)
-        tmr.wdclr()
-        local data = _CP[conn]
-        print("closed", conn, data)
-        if data then
-            _CP[conn] = nil
-        end
-        print("conn released")
-        if (cPoolSize() > 0) then
-            for c, d in pairs(_CP) do
-                loadScript("server")(c, d)
-                break
-            end
-        end
+        if _CP[conn] then _CP[conn] = nil end -- it is for safety
     end)

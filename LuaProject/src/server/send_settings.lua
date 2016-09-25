@@ -1,6 +1,7 @@
-local c = ...
+local c, cb= ...
 local s = loadScript("sender")
 
+_L_LOCK = false
 local function sendConf(c)
     local cfg = _G["cfg"]
     local dt = {}
@@ -13,10 +14,10 @@ local function sendConf(c)
     local ok, jsData = pcall(cjson.encode, dt)
     dt = nil
     if ok then
-        s(c, "\"rawData\":" .. jsData .. "}")
+        s(c, "\"data\":" .. jsData .. "}", cb)
         --jsData = nil
     else
-        s(c, "\"rawData\":null}")
+        s(c, "\"data\":null}", cb)
     end
 end
 
@@ -24,4 +25,4 @@ local function sendId(c)
     loadScript("send_file")(c, "ids", function(c) s(c, ",", sendConf) end)
 end
 
-s(c, "{\"IDS\":", sendId)
+s(c, "HTTP/1.0 200 OK\r\nAccess-Control-Allow-Origin: *\r\n\r\n{\"ids\":", sendId)

@@ -1,25 +1,25 @@
 tmr.stop(_C.MAIN_TMR)
-_MAIN_LOCK = true
+_M_LOCK = true
 
-if wifi.sta.status() ~= wifi.STA_GOTIP then
+--[[if wifi.sta.status() ~= wifi.STA_GOTIP then
     loadScript("wifi_con")()
-end
+end]]
 
 local s = loadScript("send_resp")
 
 local function onEnd()
     loadScript("clear")()
     tmr.start(_C.MAIN_TMR)
-    _MAIN_LOCK = false
+    _M_LOCK = false
 end
 
 local function errCb(st)
 
-    if (node.heap() < 20000) then
+    if (node.heap() < 23000) then
         node.restart()
     end
 
-    if st == _C.WIFI_ERR then
+    if (st == _C.WIFI_ERR or wifi.sta.status() ~= wifi.STA_GOTIP) then
         s("L3")
     elseif st == _C.C_ERR then
         s("L1")
@@ -35,23 +35,28 @@ local function errCb(st)
 end
 
 local function onUpdStatus(st)
-    -- TODO check if status changed and change sound
-    local statusChanged = _G["lStatus"] ~= st;
+    local soundNum;
+    local lightNum = 0;
     if st == _C.B_SUCC then
-        s("L5")
-        if statusChanged then
-            s("S1")
-        end
+        lightNum = 5;
+        soundNum = 1;
     elseif st == _C.B_FAIL then
-        s("L4")
-        if statusChanged then
-            s("S2")
-        end
+        lightNum = 4;
+        soundNum = 2;
     else
-        s("L6")
+        lightNum = 6;
     end
-    _G["lStatus"] = st
 
+    local statusChanged = _G["lStatus"] ~= st;
+    if(statusChanged and soundNum)then
+        s("S"..soundNum)
+    end
+
+    if(not _L_LOCK) then
+        s("L"..lightNum)
+    end
+
+    _G["lStatus"] = st
     onEnd()
 end
 
@@ -68,7 +73,7 @@ local timeForUpdIds = _G["timeForNextUpdIds"]
 if not timeForUpdIds then timeForUpdIds = 0 end
 
 local now = tmr.time() -- time in seconds
-local step = 60;
+local step = 300; -- in seconds
 local max = 2147483647;
 if timeForUpdIds < now then
     local nextTime = 0;

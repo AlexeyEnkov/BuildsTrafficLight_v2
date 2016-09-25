@@ -3,7 +3,7 @@
 
 #include "SoundManager.h"
 #include "RtttlPlayer.h"
-#include "TestLightStrategy.h"
+#include "CustomLightStrategy.h"
 #include "SystemConfig.h"
 #include "WifiModuleUtils.h"
 #include "InitSystemLightStrategy.h"
@@ -155,19 +155,28 @@ BasicLightStrategy* lightStrategies[] = {
 	new WiFiConnectionErrorLightStrategy,
 	new BuildsFailedLightStrategy,
 	new BuildsSuccessLightStrategy,
-	new BuildsFailedAndRunningLightStrategy
+	new BuildsFailedAndRunningLightStrategy,
+	new CustomLightStrategy
 };
 
 void setLightStrategy(String data)
 {
-	int lightNum = data.toInt();
-	if (lightNum >= 0 && lightNum <= 6)
+	int lightNum = data.substring(0, 1).toInt();
+
+	if (lightNum >= 0 && lightNum <= 7)
 	{
 		BasicLightStrategy* newLightStrategy = lightStrategies[lightNum + 1]; // shift by one because 0 is null_ptr
 		if (newLightStrategy != lightStrategy)
 		{
 			lightStrategy = newLightStrategy;
+			lightStrategy->reset();
 		}
+		if (lightNum == 7)
+		{
+			String leds = data.substring(1);
+			lightStrategy->setLeds(leds.charAt(0)=='1', leds.charAt(1)=='1', leds.charAt(2)=='1');
+		}
+		
 	}
 }
 

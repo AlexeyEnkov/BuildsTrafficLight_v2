@@ -39,10 +39,11 @@ dofile("init_cfg.lua")
 _C = require("constants")
 
 _WIFI_LOCK = false
-_MAIN_LOCK = false
+_M_LOCK = false
+_L_LOCK = false
 
 wifi.ap.config({ ssid = "trafficlight", pwd = "trafficlight" })
-wifi.ap.setip({ ip = "192.168.1.1", netmask = "255.255.255.0", gateway = "192.168.1.1" })
+wifi.ap.setip({ ip = "192.168.0.1", netmask = "255.255.255.0", gateway = "192.168.0.1" })
 
 loadScript("init_server")()
 
@@ -55,6 +56,7 @@ _MAIN_CO = coroutine.create(function()
         coroutine.yield()
     end
 end)
+--6000
 tmr.register(_C.MAIN_TMR, 6000, tmr.ALARM_AUTO, function() coroutine.resume(_MAIN_CO) end)
 
 -- start connect to wifi

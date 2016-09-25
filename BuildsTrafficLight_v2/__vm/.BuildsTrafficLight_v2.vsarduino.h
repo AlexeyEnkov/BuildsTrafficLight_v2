@@ -78,6 +78,8 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <..\BuildsTrafficLight_v2\BuildsFailedLightStrategy.h>
 #include <..\BuildsTrafficLight_v2\BuildsSuccessLightStrategy.cpp>
 #include <..\BuildsTrafficLight_v2\BuildsSuccessLightStrategy.h>
+#include <..\BuildsTrafficLight_v2\CustomLightStrategy.cpp>
+#include <..\BuildsTrafficLight_v2\CustomLightStrategy.h>
 #include <..\BuildsTrafficLight_v2\InitSystemLightStrategy.cpp>
 #include <..\BuildsTrafficLight_v2\InitSystemLightStrategy.h>
 #include <..\BuildsTrafficLight_v2\RtttlPlayer.cpp>
@@ -90,8 +92,6 @@ extern "C" void __cxa_pure_virtual() {;}
 #include <..\BuildsTrafficLight_v2\SystemConfigHelper.h>
 #include <..\BuildsTrafficLight_v2\SystemUtils.cpp>
 #include <..\BuildsTrafficLight_v2\SystemUtils.h>
-#include <..\BuildsTrafficLight_v2\TestLightStrategy.cpp>
-#include <..\BuildsTrafficLight_v2\TestLightStrategy.h>
 #include <..\BuildsTrafficLight_v2\WiFiConnectionErrorLightStrategy.cpp>
 #include <..\BuildsTrafficLight_v2\WiFiConnectionErrorLightStrategy.h>
 #include <..\BuildsTrafficLight_v2\WifiModuleUtils.cpp>

@@ -57,9 +57,6 @@
     <ClInclude Include="WiFiConnectionErrorLightStrategy.h">
       <Filter>Header Files\lightstrategies</Filter>
     </ClInclude>
-    <ClInclude Include="TestLightStrategy.h">
-      <Filter>Header Files\lightstrategies</Filter>
-    </ClInclude>
     <ClInclude Include="WifiModuleUtils.h">
       <Filter>Header Files\utils</Filter>
     </ClInclude>
@@ -77,6 +74,9 @@
     </ClInclude>
     <ClInclude Include="SystemConfigHelper.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomLightStrategy.h">
+      <Filter>Header Files\lightstrategies</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -104,9 +104,6 @@
     <ClCompile Include="WiFiConnectionErrorLightStrategy.cpp">
       <Filter>Source Files\lightstrategies</Filter>
     </ClCompile>
-    <ClCompile Include="TestLightStrategy.cpp">
-      <Filter>Source Files\lightstrategies</Filter>
-    </ClCompile>
     <ClCompile Include="SystemUtils.cpp">
       <Filter>Source Files\utils</Filter>
     </ClCompile>
@@ -124,6 +121,9 @@
     </ClCompile>
     <ClCompile Include="SystemConfigHelper.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomLightStrategy.cpp">
+      <Filter>Source Files\lightstrategies</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

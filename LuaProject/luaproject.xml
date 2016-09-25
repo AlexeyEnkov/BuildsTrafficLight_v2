@@ -12,13 +12,20 @@
     </target>
 
     <target name="build" depends="clear">
-        <antcall target="minifyLua"/>
+        <antcall target="minifyLuaNew"/>
 
         <copy todir="${build}" flatten="true" includeemptydirs="false">
             <fileset dir="${src}\resources">
                 <exclude name="**\work\*"/>
+                <include name="cfg"/>
+                <include name="ids"/>
             </fileset>
         </copy>
+        <gzip src="${src}\resources\start_page.html" destfile="${build}\start_page.html"/>
+        <gzip src="${src}\resources\start_page.js" destfile="${build}\start_page.js"/>
+        <gzip src="${src}\resources\start_page.css" destfile="${build}\start_page.css"/>
+        <gzip src="${src}\resources\refresh.png" destfile="${build}\refresh.png"/>
+        <gzip src="${src}\resources\favicon.png" destfile="${build}\favicon.png"/>
     </target>
 
 
@@ -48,5 +55,32 @@
         <delete dir="${build}\temp"/>
     </target>
 
+    <target name="minifyLuaNew">
+        <delete dir="${build}\temp"/>
+        <copy todir="${build}\temp" flatten="true" includeEmptyDirs="false">
+            <fileset dir="${src}\">
+                <filename name="**\*.lua"/>
+            </fileset>
+        </copy>
+
+        <apply executable="${base}\tools\Lua\lua\bin\lua.exe" parallel="false">
+            <arg value="${base}\tools\luaDietNew\bin\LuaSrcDiet.lua"/>
+            <srcfile/>
+            <fileset dir="${build}\temp\">
+                <filename name="**\*.lua"/>
+            </fileset>
+            <arg value="--maximum"/>
+            <arg value="--noopt-numbers"/>
+        </apply>
+
+        <move todir="${build}" includeEmptyDirs="false">
+            <fileset dir="${build}\temp">
+                <include name="**\*_.lua"/>
+            </fileset>
+            <globmapper from="*_.lua" to="*.lua"/>
+        </move>
+
+        <delete dir="${build}\temp"/>
+    </target>
 
 </project>

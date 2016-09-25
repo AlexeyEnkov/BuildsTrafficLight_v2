@@ -13,6 +13,7 @@
 
 class BuildsFailedLightStrategy :public BasicLightStrategy {
 public:
+	BuildsFailedLightStrategy();
 	void lighting();
 };
 #endif

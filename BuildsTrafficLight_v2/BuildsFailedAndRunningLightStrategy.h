@@ -13,6 +13,7 @@
 
 class BuildsFailedAndRunningLightStrategy:public BasicLightStrategy {
 public: 
+	BuildsFailedAndRunningLightStrategy();
 	void lighting();
 };
 #endif

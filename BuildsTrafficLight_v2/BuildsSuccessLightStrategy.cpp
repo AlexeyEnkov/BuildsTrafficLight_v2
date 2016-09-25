@@ -5,6 +5,11 @@
 #include "BuildsSuccessLightStrategy.h"
 
 
+BuildsSuccessLightStrategy::BuildsSuccessLightStrategy()
+{
+	setLeds(false, false, true);
+}
+
 void BuildsSuccessLightStrategy::lighting() {
-	leds(false, false, true);
+	light();
 }

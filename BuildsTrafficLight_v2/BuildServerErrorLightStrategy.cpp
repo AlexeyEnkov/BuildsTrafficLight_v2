@@ -12,5 +12,6 @@ void BuildServerErrorLightStrategy::lighting(){
 		redLed = !redLed;
 		innerCounter = 0;
 	}
-	leds(redLed, false, false);
+	setLeds(redLed, false, false);
+	light();
 }

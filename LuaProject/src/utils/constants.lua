@@ -13,4 +13,6 @@ mod.B_RUN = 3;
 mod.MAIN_TMR = 0;
 mod.STAT_TMR = 1;
 mod.WIFI_TMR = 2;
+mod.FILE_TMR = 3;
+mod.CL_TMR = 4;
 return mod

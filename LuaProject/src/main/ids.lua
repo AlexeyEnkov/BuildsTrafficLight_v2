@@ -7,7 +7,11 @@ return function(cb)
                 local function safe(code, data)
                     local st = _C.OK
                     if (code ~= 200) then
-                        if (code < 0) then st = _C.C_ERR else st = _C.R_ERR end
+                        if (code < 0) then
+                            st = _C.C_ERR
+                        else
+                            st = _C.R_ERR
+                        end
                     else
                         local jIds = cjson.decode(data)
                         data = nil

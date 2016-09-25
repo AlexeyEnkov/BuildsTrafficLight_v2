@@ -14,6 +14,7 @@
 class BuildsSuccessLightStrategy : public BasicLightStrategy {
 
 public:
+	BuildsSuccessLightStrategy();
 	void lighting();
 };
 #endif

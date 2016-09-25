@@ -13,5 +13,6 @@ void WiFiConnectionErrorLightStrategy::lighting() {
 		isRedNotYellow = !isRedNotYellow;
 		innerCounter = 0;
 	}
-	leds(isRedNotYellow, !isRedNotYellow, false);
+	setLeds(isRedNotYellow, !isRedNotYellow, false);
+	light();
 }

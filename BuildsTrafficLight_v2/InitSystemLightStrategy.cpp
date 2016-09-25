@@ -15,6 +15,6 @@ void InitSystemLightStrategy::lighting() {
 			curLeds = 4;
 		}
 	}
-	leds(curLeds & 0x4, curLeds & 0x2 , curLeds & 0x1);
-	//leds(true, false, true);
+	setLeds(curLeds & 0x4, curLeds & 0x2 , curLeds & 0x1);
+	light();
 }

@@ -1,17 +1,56 @@
-var d = document;
-function LTR(ids, data) {
-    this.ids = ids;
-    this.renderIds(ids, data["cfg"]["ignoredIds"]);
-    this.fillForm(data["cfg"]);
-    this.setUpInf(data);
-    var s = this;
-    d.getElementById("save").onclick = function () {
-        s.save();
+"use strict";
+function LTR() {
+    var d = document;
+    var moduleContent = '';
+    var ids = [];
+    var activeLight = {
+        "r": false,
+        "y": false,
+        "g": false
     };
-}
-LTR.prototype = {
-    renderIds: function (ids, ignored) {
-        var cont = d.getElementById("idscont");
+    var processed = false;
+
+    var getElemById = function (id) {
+        return d.getElementById(id);
+    };
+
+    var querySelectAll = function (query) {
+        return Array.prototype.slice.call(d.querySelectorAll(query))
+    };
+
+    var saveBtn = getElemById("save");
+    var refreshBtn = getElemById("refresh");
+    refreshBtn.onclick = function () {
+        if (!processed)update()
+    };
+    saveBtn.onclick = function () {
+        if (!processed)save()
+    };
+    getElemById("trl").onclick = function (e) {
+        var id = e.target.id;
+        if (activeLight.hasOwnProperty(id) && !processed) {
+            activeLight[id] = !activeLight[id];
+            sendLights();
+            activateLights();
+        }
+    };
+
+    querySelectAll("#bright input").forEach(function (inp) {
+        inp.onblur = function (inp) {
+            return function () {
+                if (inp.value > 100) {
+                    inp.value = 100;
+                }
+                if (inp.value < 0) {
+                    inp.value = 0;
+                }
+            }
+        }(inp);
+    });
+
+    var renderIds = function (ids, ignored) {
+        var cont = getElemById("idscont");
+        cont.innerHTML = "";
         for (var i = 0; i < ids.length; i++) {
             var checked = ignored && ignored.indexOf(ids[i]) != -1;
             var idLbl = d.createElement("label");
@@ -19,95 +58,173 @@ LTR.prototype = {
             idLbl.title = ids[i];
             cont.appendChild(idLbl);
         }
-    },
-    getIn: function (name) {
+    };
+
+    var getInput = function (name) {
         return d.querySelector("input[name='" + name + "']");
-    },
-    fillIn: function (name, val) {
-        var inp = this.getIn(name);
+    };
+    var fillInput = function (name, val) {
+        var inp = getInput(name);
         if (inp) inp.value = val;
-    },
-    fillForm: function (cfg) {
-        this.fillIn("ssid", cfg["ssid"]);
-        this.fillIn("ip", cfg["ip"]);
-        this.fillIn("port", cfg["port"]);
+    };
+    var fillForm = function (cfg) {
+        fillInput("ssid", cfg["ssid"]);
+        fillInput("ip", cfg["ip"]);
+        fillInput("port", cfg["port"]);
         if (cfg["bright"]) {
-            this.fillIn("red", cfg["bright"]["r"]);
-            this.fillIn("yellow", cfg["bright"]["y"]);
-            this.fillIn("green", cfg["bright"]["g"]);
+            fillInput("red", cfg["bright"]["r"]);
+            fillInput("yellow", cfg["bright"]["y"]);
+            fillInput("green", cfg["bright"]["g"]);
         }
         d.querySelector("input[name='sound']").checked = cfg["sound"];
-    },
-    getCfg: function () {
+    };
+
+    var getCfg = function () {
         var cfg = {};
-        cfg["ssid"] = this.getIn("ssid").value;
-        cfg["pass"] = this.getIn("pass").value;
-        cfg["ip"] = this.getIn("ip").value;
-        cfg["port"] = this.getIn("port").value;
-        cfg["sound"] = this.getIn("sound").checked;
+        cfg["ssid"] = getInput("ssid").value;
+        cfg["pass"] = getInput("pass").value;
+        cfg["ip"] = getInput("ip").value;
+        cfg["port"] = getInput("port").value;
+        cfg["sound"] = getInput("sound").checked;
         cfg["bright"] = {};
-        cfg["bright"]["r"] = this.getIn("red").value;
-        cfg["bright"]["y"] = this.getIn("yellow").value;
-        cfg["bright"]["g"] = this.getIn("green").value;
+        cfg["bright"]["r"] = getInput("red").value;
+        cfg["bright"]["y"] = getInput("yellow").value;
+        cfg["bright"]["g"] = getInput("green").value;
         cfg["ignoredIds"] = [];
-        for (var i = 0; i < this.ids.length; i++) {
-            var id = this.ids[i];
-            if (this.getIn(id).checked) {
+        for (var i = 0; i < ids.length; i++) {
+            var id = ids[i];
+            if (getInput(id).checked) {
                 cfg["ignoredIds"].push(id);
             }
         }
         return cfg;
-    },
-    save: function () {
+    };
+
+    var save = function () {
+        onStartUpdate();
         fetch("/settings", {
             method: "POST",
-            body: JSON.stringify(this.getCfg())
+            body: JSON.stringify(getCfg())
         })
             .then(
-                function(response) {
+                function (response) {
                     console.log(response["status"]);
                     return response.json();
                 }
             ).then(
-            function(data) {
+            function (data) {
+                onEndUpdate();
                 console.log(data);
-            }
-        )
-    },
-    setUpInf: function (data) {
-        d.getElementById("ip").textContent = "Wifi: " + (data["ownIp"] ? "connected. Local ip: " + data["ownIp"] : "not connected.");
+            })
+            .catch(function (err) {
+                onEndUpdate();
+                showErr(true);
+                console.error(err);
+            });
+    };
 
-        var r = d.getElementById("r");
-        var y = d.getElementById("y");
-        var g = d.getElementById("g");
+    var setupData = function (data) {
+        getElemById("ip").textContent = "Wifi: " + (data["ownIp"] ? "connected. Local ip: " + data["ownIp"] : "not connected.");
+        var failedIds = getElemById("cid");
+        failedIds.textContent = "";
+        for (var l in activeLight) {
+            if (activeLight.hasOwnProperty(l))
+                activeLight[l] = false;
+        }
         switch (data["status"]) {//TODO: constants (same as in constants.lua)
             case 1:
-                g.className = "act";
+                activeLight["g"] = true;
                 break;
             case 3:
-                r.className = "act";
-                y.className = "act";
+                activeLight["r"] = true;
+                activeLight["y"] = true;
                 break;
             case 2:
-                r.className = "act";
-                d.getElementById("cid").textContent = "Failed build: " + data["targetId"];
+                activeLight["r"] = true;
+                failedIds.textContent = "Failed build: " + data["targetId"];
                 break;
         }
-    }
-};
+        activateLights();
+    };
 
-window.onload = function() {
-    fetch("/settings")
-        .then(
-            function(response) {
-                console.log(response["status"]);
-                return response.json();
-            }
-        )
-        .then(
-            function(data) {
-                console.log(data);
-                new LTR(data["IDS"],data["rawData"]);
-            }
-        )
+    var sendLights = function () {
+        onStartUpdate();
+        fetch("/lights", {
+            method: "POST",
+            body: JSON.stringify(activeLight)
+        }).then(function () {
+            onEndUpdate();
+        }).catch(function (err) {
+            console.error(err);
+            onEndUpdate();
+        });
+    };
+
+    var update = function () {
+        onStartUpdate();
+        fetch("/settings")
+            .then(
+                function (response) {
+                    return response.json();
+                }
+            )
+            .then(
+                function (resp) {
+                    ids = resp["ids"];
+                    var data = resp["data"];
+                    renderIds(ids, data["cfg"]["ignoredIds"]);
+                    fillForm(data["cfg"]);
+                    setupData(data);
+                    onEndUpdate();
+                }
+            )
+            .catch(
+                function (err) {
+                    onEndUpdate();
+                    showErr(true);
+                    console.error(err);
+                }
+            );
+    };
+
+    var onStartUpdate = function () {
+        processed = true;
+        showErr(false);
+        onOffControls(true);
+        refreshBtn.className = "process";
+    };
+    var onEndUpdate = function () {
+        processed = false;
+        onOffControls(false);
+        refreshBtn.className = "";
+    };
+
+    var onOffControls = function (isOff) {
+        querySelectAll('input')
+            .forEach(function (el) {
+                el.disabled = isOff;
+            });
+        saveBtn.className = isOff ? "dis" : "";
+    };
+
+    var activateLights = function () {
+        for (var l in activeLight) {
+            if (activeLight.hasOwnProperty(l))
+                getElemById(l).className = activeLight[l] ? "act" : "";
+        }
+    };
+
+    var showErr = function (isShow) {
+        getElemById("err").className = isShow ? "show" : "";
+    };
+
+
+    return {
+        update: update
+    }
+}
+
+window.onload = function () {
+    var ltr = LTR();
+    ltr.update();
 };

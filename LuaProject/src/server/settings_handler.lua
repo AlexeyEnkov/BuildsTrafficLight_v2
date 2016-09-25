@@ -59,8 +59,9 @@ if succ then
         if wifiChanged then
             loadScript("wifi_con")()
         end
-        c:close()
+        if cb then cb(c)
+        else c:close() end
     end)
 else
-    snd(c, headers .. "{\"result\": \"Err\"}")
+    snd(c, headers .. "{\"result\": \"Err\"}", cb)
 end

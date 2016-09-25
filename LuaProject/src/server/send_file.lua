@@ -31,5 +31,5 @@ local function sendProcess()
 end
 
 c:on("sent", function(c) tmr.wdclr() busyFileSend = false end)
-tmr.register(3, 10, tmr.ALARM_AUTO, sendProcess)
-tmr.start(3)
+tmr.register(_C.FILE_TMR, 10, tmr.ALARM_AUTO, sendProcess)
+tmr.start(_C.FILE_TMR)

@@ -16,20 +16,12 @@ const char soundOnSong[] PROGMEM = { "s:d=32,o=5,b=100:b4,10e5" };
 
 void SoundManagerClass::playGoodSound()
 {
-	if (prevSoundType != GOOD_SOUND)
-	{
-		playSound(goodSong);
-		prevSoundType = GOOD_SOUND;
-	} 
+	playSound(goodSong);
 }
 
 void SoundManagerClass::playBadSound()
 {
-	if (prevSoundType != BAD_SOUND)
-	{
-		playSound(failureSong);
-		prevSoundType = BAD_SOUND;
-	}
+	playSound(failureSong);
 }
 
 void SoundManagerClass::playInitSound()
@@ -49,9 +41,9 @@ void SoundManagerClass::performPlayAction()
 
 void SoundManagerClass::playSound(const char * sound)
 {
-	if (SystemConfig.getSoundParams().isOn == true) 
+	if (SystemConfig.getSoundParams().isOn == true)
 	{
 		RtttlPlayer.begin(SOUND_PIN, sound);
 	}
-	
+
 }
