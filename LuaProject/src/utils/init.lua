@@ -5,9 +5,9 @@ uart.setup(0, 115200, 8, uart.PARITY_NONE, uart.STOPBITS_1, 0)
 
 wifi.setmode(wifi.STATIONAP)
 --wifi.setmode(wifi.STATION)
-wifi.setphymode(wifi.PHYMODE_G)
+wifi.setphymode(wifi.PHYMODE_B)
 wifi.sta.setmac("CE:A4:62:99:CF:75")
-wifi.sta.autoconnect(1)
+wifi.sta.autoconnect(0)
 
 -- precompile files (did not working)
 --[[for k, v in pairs(file.list()) do
@@ -56,14 +56,14 @@ _MAIN_CO = coroutine.create(function()
         coroutine.yield()
     end
 end)
---6000
-tmr.register(_C.MAIN_TMR, 6000, tmr.ALARM_AUTO, function() coroutine.resume(_MAIN_CO) end)
-
--- start connect to wifi
 local function mainStart()
     coroutine.resume(_MAIN_CO)
+    --6000
+    tmr.register(_C.MAIN_TMR, 6000, tmr.ALARM_AUTO, function() coroutine.resume(_MAIN_CO) end)
+
 end
 
+-- start connect to wifi
 loadScript("wifi_con")(mainStart, mainStart)
 
 -- send initial values only if bootreason is power up
