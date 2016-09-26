@@ -1,9 +1,10 @@
 tmr.stop(_C.MAIN_TMR)
 _M_LOCK = true
 
---[[if wifi.sta.status() ~= wifi.STA_GOTIP then
+if wifi.sta.status() ~= wifi.STA_GOTIP and not tmr.state(_C.WIFI_TMR) then
     loadScript("wifi_con")()
-end]]
+    print("reconnect from main")
+end
 
 local s = loadScript("send_resp")
 
@@ -15,7 +16,8 @@ end
 
 local function errCb(st)
 
-    if (node.heap() < 23000) then
+    if (node.heap() < 20000 and st == _C.P_ERR) then
+        print("need memory", st)
         node.restart()
     end
 
@@ -25,10 +27,6 @@ local function errCb(st)
         s("L1")
     elseif st == _C.R_ERR then
         s("L2")
-    else
-        -- P_ERR
-        print(st)
-        node.restart()
     end
 
     onEnd()

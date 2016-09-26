@@ -13,7 +13,7 @@ local function ercb()
     print("errccb")
     _WIFI_LOCK = false
 
-    tmr.alarm(_C.WIFI_TMR, 10000, tmr.ALARM_SINGLE, loadScript("wifi_con"))
+    tmr.alarm(_C.WIFI_TMR, 15000, tmr.ALARM_SINGLE, loadScript("wifi_con"))
 end
 
 local function succb()
@@ -31,5 +31,6 @@ wifi.sta.eventMonReg(wifi.STA_WRONGPWD, function() ercb() end)
 print("try connect")
 wifi.setmode(wifi.STATIONAP)
 wifi.sta.eventMonStart(300)
-wifi.sta.config(_G["cfg"].ssid, _G["cfg"].pass)
+local cfg = loadScript("get_cfg")()
+wifi.sta.config(cfg.ssid, cfg.pass)
 wifi.sta.connect()

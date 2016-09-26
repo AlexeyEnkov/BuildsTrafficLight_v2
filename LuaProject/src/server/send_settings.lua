@@ -3,7 +3,7 @@ local s = loadScript("sender")
 
 _L_LOCK = false
 local function sendConf(c)
-    local cfg = _G["cfg"]
+    local cfg = loadScript("get_cfg")()
     local dt = {}
     dt.cfg = {}
     dt.cfg.ssid = cfg.ssid dt.cfg.ip = cfg.ip dt.cfg.port = cfg.port

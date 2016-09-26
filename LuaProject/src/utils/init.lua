@@ -29,13 +29,12 @@ end
 _CP = {}
 function cPoolSize()
     local ind = 0;
-    for k, _ in pairs(_CP) do
+    for _, _ in pairs(_CP) do
         ind = ind + 1;
     end
     return ind
 end
 
-dofile("init_cfg.lua")
 _C = require("constants")
 
 _WIFI_LOCK = false
@@ -56,19 +55,18 @@ _MAIN_CO = coroutine.create(function()
         coroutine.yield()
     end
 end)
+
+--6000
+tmr.register(_C.MAIN_TMR, 6000, tmr.ALARM_AUTO, function() coroutine.resume(_MAIN_CO) end)
 local function mainStart()
     coroutine.resume(_MAIN_CO)
-    --6000
-    tmr.register(_C.MAIN_TMR, 6000, tmr.ALARM_AUTO, function() coroutine.resume(_MAIN_CO) end)
-
 end
-
 -- start connect to wifi
 loadScript("wifi_con")(mainStart, mainStart)
 
--- send initial values only if bootreason is power up
+-- send initial values only if bootreason is power up and external reset
 code, reason = node.bootreason()
-if (1 == code and reason == 0) then
+if (1 == code and reason == 0 or 2 == code and reason == 6) then
     loadScript("send_conf")()
     local s = loadScript("send_resp")
     s("L0")

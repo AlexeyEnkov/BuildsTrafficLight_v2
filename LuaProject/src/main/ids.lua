@@ -1,5 +1,5 @@
 return function(cb)
-    local CFG = _G["cfg"]
+    local CFG = loadScript("get_cfg")()
     if wifi.sta.status() == wifi.STA_GOTIP then
         http.get("http://" .. CFG.ip .. ":" .. CFG.port .. "/guestAuth/app/rest/buildTypes",
             "Accept: application/json\r\n",

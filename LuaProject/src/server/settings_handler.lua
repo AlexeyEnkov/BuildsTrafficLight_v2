@@ -10,11 +10,15 @@ if data then
         local newConf = {}
         newConf.ssid = updConf.ssid
 
-        if updConf.ssid ~= _G["cfg"].ssid then
+        local cfg = loadScript("get_cfg")()
+        local oldSsid = cfg.ssid
+        local oldPass = cfg.pass
+        cfg = nil
+        if updConf.ssid ~= oldSsid then
             wifiChanged = true
         end
         if (updConf.pass and #updConf.pass >= 8) then
-            wifiChanged = true newConf.pass = updConf.pass else newConf.pass = _G["cfg"].pass
+            wifiChanged = true newConf.pass = updConf.pass else newConf.pass = oldPass
         end
         newConf.ip = updConf.ip
         newConf.port = updConf.port
@@ -42,7 +46,6 @@ if data then
         if k then
             file.open("cfg", "w")
             if pcall(file.writeline, serNCfg) then
-                _G["cfg"] = newConf
                 succ = true
             end
             file.close()
