@@ -1,4 +1,3 @@
-tmr.stop(_C.MAIN_TMR)
 _M_LOCK = true
 
 if wifi.sta.status() ~= wifi.STA_GOTIP and not tmr.state(_C.WIFI_TMR) then
@@ -10,8 +9,7 @@ local s = loadScript("send_resp")
 
 local function onEnd()
     loadScript("clear")()
-    tmr.start(_C.MAIN_TMR)
-    _M_LOCK = false
+    _M_LOCK = false -- it is important to reset this flag
 end
 
 local function errCb(st)
@@ -46,12 +44,12 @@ local function onUpdStatus(st)
     end
 
     local statusChanged = _G["lStatus"] ~= st;
-    if(statusChanged and soundNum)then
-        s("S"..soundNum)
+    if (statusChanged and soundNum) then
+        s("S" .. soundNum)
     end
 
-    if(not _L_LOCK) then
-        s("L"..lightNum)
+    if (not _L_LOCK) then
+        s("L" .. lightNum)
     end
 
     _G["lStatus"] = st
@@ -71,7 +69,7 @@ local timeForUpdIds = _G["timeForNextUpdIds"]
 if not timeForUpdIds then timeForUpdIds = 0 end
 
 local now = tmr.time() -- time in seconds
-local step = 300; -- in seconds
+local step = 120; -- in seconds
 local max = 2147483647;
 if timeForUpdIds < now then
     local nextTime = 0;
@@ -82,7 +80,7 @@ if timeForUpdIds < now then
     end
     _G["timeForNextUpdIds"] = nextTime
     require("ids")(onUpdateIdsCb)
-    print("upIds")
+    print("start update ids")
 else
     onUpdateIdsCb(_C.OK)
 end

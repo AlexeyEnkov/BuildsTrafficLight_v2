@@ -32,8 +32,12 @@ return function(cb)
                         if notParsedIds then
                             local oldIds = cjson.decode(notParsedIds)
                             notParsedIds = nil
-                            for i, _ in pairs(newIds) do
-                                if newIds[i] ~= oldIds[i] then isNew = true break end
+                            if #newIds == #oldIds then
+                                for i, _ in pairs(newIds) do
+                                    if newIds[i] ~= oldIds[i] then isNew = true break end
+                                end
+                            else
+                                isNew = true
                             end
                             oldIds = nil
                         else

@@ -5,7 +5,7 @@ uart.setup(0, 115200, 8, uart.PARITY_NONE, uart.STOPBITS_1, 0)
 
 wifi.setmode(wifi.STATIONAP)
 --wifi.setmode(wifi.STATION)
-wifi.setphymode(wifi.PHYMODE_B)
+wifi.setphymode(wifi.PHYMODE_G)
 wifi.sta.setmac("CE:A4:62:99:CF:75")
 wifi.sta.autoconnect(0)
 
@@ -49,7 +49,7 @@ loadScript("init_server")()
 --init timer function for scheduling
 _MAIN_CO = coroutine.create(function()
     while true do
-        if (cPoolSize() == 0) then
+        if (cPoolSize() == 0 and not _M_LOCK) then
             loadScript("main")()
         end
         coroutine.yield()
