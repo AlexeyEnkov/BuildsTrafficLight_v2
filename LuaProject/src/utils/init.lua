@@ -60,6 +60,7 @@ end)
 tmr.register(_C.MAIN_TMR, 6000, tmr.ALARM_AUTO, function() coroutine.resume(_MAIN_CO) end)
 local function mainStart()
     coroutine.resume(_MAIN_CO)
+    tmr.start(_C.MAIN_TMR)
 end
 -- start connect to wifi
 loadScript("wifi_con")(mainStart, mainStart)
