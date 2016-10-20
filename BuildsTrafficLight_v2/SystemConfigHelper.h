@@ -3,11 +3,7 @@
 #ifndef _SYSTEMCONFIGHELPER_h
 #define _SYSTEMCONFIGHELPER_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "BuildsTrafficLight_v2.h"
 
 #include "SystemConfig.h"
 
@@ -15,13 +11,14 @@ class SystemConfigHelperClass
 {
 public:
 
-	SystemConfigHelperClass() {};
+        SystemConfigHelperClass() {}
 
 	void handleCfg(String& rawCfg);
 
 private:
-	void handleBrightness(String params);
-	void handleSound(String params);
+        void handleBrightness(String && params);
+        void handleSound(String && params);
+        void handleSoundVolume(String && params);
 };
 
 static SystemConfigHelperClass SystemConfigHelper;

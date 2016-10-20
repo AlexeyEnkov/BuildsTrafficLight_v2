@@ -4,19 +4,42 @@
 
 #include "SystemConfig.h"
 
+#define TRAFFIC_LIGHT_PARAMS_EEPROM_ADDR 0 // lenght 1+1+1 = 3 bytes
+#define SOUND_PARAMS_EEPROM_ADDR 3 // lenght 1 byte
+#define DEBUG_MODE_EEPROM_ADDR 3 // lenght 1 byte
+
 SystemConfigClass SystemConfig;
 
+#ifdef BTL_DEBUG_NO_EEPROM
+
+struct FakeEEPROM {
+    void write( int idx, const byte &t ){}
+    template< typename T > void put( int idx, const T &t ){}
+    template< typename T > void update( int idx, const T &t ){}
+};
+
+FakeEEPROM EEPROM;
+
+#else
+#include <EEPROM.h>
+#endif
+
 void SystemConfigClass::initFromEEPROM()
-{
-	TrafficLightBrightness trLightBr;
-	EEPROM.get(TRAFFIC_LIGHT_PARAMS_EEPROM_ADDR, trLightBr);
-	this->trLightBrightness = trLightBr;
+{    
+#ifdef BTL_DEBUG_NO_EEPROM
+    soundParams.isOn = 1;
+    soundParams.volume = 15;
+#else
+        EEPROM.get(TRAFFIC_LIGHT_PARAMS_EEPROM_ADDR, trLightBrightness);
 
 	SoundParams soundParams;
-	EEPROM.get(SOUND_PARAMS_EEPROM_ADDR, soundParams);
-	this->soundParams = soundParams;
+        byte sndCompact = EEPROM.read(SOUND_PARAMS_EEPROM_ADDR);
+        soundParams.isOn = sndCompact >> 5;
+        // yes, we don`t need 31(x1f), only from 0 to 30, but it`s ok
+        soundParams.volume = sndCompact & 0x1f;
 
 	this->isDebug = (EEPROM.read(DEBUG_MODE_EEPROM_ADDR) != 0 ? true : false);
+#endif
 }
 
 TrafficLightBrightness SystemConfigClass::getTrafficLightBrightness()
@@ -30,15 +53,16 @@ void SystemConfigClass::updateTrafficLightBrightness(TrafficLightBrightness newP
 	EEPROM.put(TRAFFIC_LIGHT_PARAMS_EEPROM_ADDR, newParams);
 }
 
-SoundParams SystemConfigClass::getSoundParams()
+const SoundParams& SystemConfigClass::getSoundParams()
 {
 	return soundParams;
 }
 
-void SystemConfigClass::updateSoundParams(SoundParams newParams)
+void SystemConfigClass::updateSoundParams(const SoundParams& newParams)
 {
 	this->soundParams = newParams;
-	EEPROM.put(SOUND_PARAMS_EEPROM_ADDR, newParams);
+        byte sndCompact = (soundParams.isOn << 5) + soundParams.volume;
+        EEPROM.write(SOUND_PARAMS_EEPROM_ADDR, sndCompact);
 }
 
 boolean SystemConfigClass::isDebugMode()
