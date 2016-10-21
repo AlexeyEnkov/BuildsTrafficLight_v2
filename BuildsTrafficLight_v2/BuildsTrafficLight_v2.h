@@ -7,8 +7,10 @@
 #include "WProgram.h"
 #endif
 
-#define BTL_DEBUG_NO_WIFI
-#define BTL_DEBUG_NO_EEPROM
+// Use it to fake some parts
+
+//#define BTL_DEBUG_NO_WIFI
+//#define BTL_DEBUG_NO_EEPROM
 
 #ifdef BTL_DEBUG_NO_WIFI
 #define SERIAL_WIFI Serial

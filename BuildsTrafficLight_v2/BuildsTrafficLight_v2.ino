@@ -12,7 +12,7 @@
 #include "SystemUtils.h"
 #include "SystemConfigHelper.h"
 
-SoftwareSerial soundSerial(7, 8);
+SoftwareSerial soundSerial(SERIAL_SOUND_RX, SERIAL_SOUND_TX);
 #define Serial1 SERIAL_WIFI
 
 void setup() {
@@ -70,7 +70,6 @@ void routineProcess()
         {
             lightStrategy->lighting();
         }
-        SoundManager.performPlayAction();
         counter = 0;
     }
     counter++;
