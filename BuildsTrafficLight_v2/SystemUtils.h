@@ -3,13 +3,9 @@
 #ifndef _SYSTEMUTILS_h
 #define _SYSTEMUTILS_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "BuildsTrafficLight_v2.h"
 
-#include "eeprom.h"
+#include "EEPROM.h"
 
 #define xstr(s) str(s)
 #define str(s) #s
@@ -23,7 +19,8 @@
 #define YELLOW_PIN 10
 #define GREEN_PIN 9
 
-#define SOUND_PIN 5
+#define SERIAL_SOUND_RX 7
+#define SERIAL_SOUND_TX 8
 
 #define MAIN_TIMER_TICKS_IN_1SEC 20 // times is 1 sec
 #define FAST_TIMER_TICKS_IN_1SEC 500 // determine frequency of pwm (adjusted for traffic light led lamps) need 500
@@ -46,7 +43,7 @@ private:
 	unsigned long timeForUpdateIds = 0;
 };
 
-static SystemUtils_ SystemUtils;
+extern SystemUtils_ SystemUtils;
 #endif
 
 

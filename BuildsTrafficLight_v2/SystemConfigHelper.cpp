@@ -4,6 +4,9 @@
 
 #include "SystemConfigHelper.h"
 
+// we need to trigger imediate change of volume
+#include "SoundManager.h"
+
 void SystemConfigHelperClass::handleCfg(String & rawCfg)
 {
 	String curParam = "";
@@ -17,15 +20,19 @@ void SystemConfigHelperClass::handleCfg(String & rawCfg)
 		{
 			handleBrightness(curParam.substring(3));
 		}
-		if (curParam.startsWith(F("sound=")))
+                else if (curParam.startsWith(F("sound=")))
 		{
 			handleSound(curParam.substring(6));
 		}
+                else if (curParam.startsWith(F("vol=")))
+                {
+                        handleSoundVolume(curParam.substring(4));
+                }
 		delimInd = rawCfg.indexOf(";", startParamInd);
 	}
 }
 
-void SystemConfigHelperClass::handleBrightness(String params)
+void SystemConfigHelperClass::handleBrightness(String && params)
 {
 	TrafficLightBrightness newParam;
 	int startInd = 0;
@@ -69,13 +76,29 @@ void SystemConfigHelperClass::handleBrightness(String params)
 
 }
 
-void SystemConfigHelperClass::handleSound(String params)
+void SystemConfigHelperClass::handleSound(String && params)
 {
-	SoundParams newParams;
-	newParams.isOn = params.equalsIgnoreCase("1") ? 1 : 0;
-	if (newParams.isOn != SystemConfig.getSoundParams().isOn)
-	{
-		SystemConfig.updateSoundParams(newParams);
-	}
+    byte isOn = params.equalsIgnoreCase("1") ? 1 : 0;
 
+    if (isOn != SystemConfig.getSoundParams().isOn)
+    {
+        SoundParams newParams = SystemConfig.getSoundParams();
+        newParams.isOn = isOn;
+        SystemConfig.updateSoundParams(newParams);
+    }
+
+}
+
+void SystemConfigHelperClass::handleSoundVolume(String && params)
+{
+    uint8_t volume = params.toInt();
+    if (volume != SystemConfig.getSoundParams().volume
+            // Sound volume from 0 to 30
+            && volume<31)
+    {
+        SoundManager.setVolume(volume);
+        SoundParams newParams = SystemConfig.getSoundParams();
+        newParams.volume = volume;
+        SystemConfig.updateSoundParams(newParams);
+    }
 }

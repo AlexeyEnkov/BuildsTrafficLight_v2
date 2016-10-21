@@ -1,8 +1,4 @@
-#include <EEPROM.h>
-#include <TimerOne.h>
-
 #include "SoundManager.h"
-#include "RtttlPlayer.h"
 #include "CustomLightStrategy.h"
 #include "SystemConfig.h"
 #include "WifiModuleUtils.h"
@@ -16,36 +12,47 @@
 #include "SystemUtils.h"
 #include "SystemConfigHelper.h"
 
+SoftwareSerial soundSerial(SERIAL_SOUND_RX, SERIAL_SOUND_TX);
+#define Serial1 SERIAL_WIFI
+
 void setup() {
+    pinMode(MODULE_RESET_PIN, OUTPUT);
+    digitalWrite(MODULE_RESET_PIN, LOW);
+    //digitalWrite(MODULE_RESET_PIN, HIGH);
 
-	pinMode(MODULE_RESET_PIN, OUTPUT);
-	digitalWrite(MODULE_RESET_PIN, LOW);
-	//digitalWrite(MODULE_RESET_PIN, HIGH);
+    long serialSpeed = 115200;
+    #ifndef BTL_DEBUG_NO_WIFI
+    Serial.begin(serialSpeed);
+    #endif
+    //while (!Serial) {}
+    Serial1.begin(serialSpeed);
 
-	long serialSpeed = 115200;
-	Serial.begin(serialSpeed);
-	//while (!Serial) {}
-	Serial1.begin(serialSpeed);
-	while (!Serial1) {}
+    // Software serial can operate on 57600,
+    // but we need same as on player
+    soundSerial.begin(9600);
 
-	// uncomment for debug module loop
-	/*for (;;) {
-	if (Serial.available())  Serial1.write(Serial.read());
-	if (Serial1.available()) Serial.write(Serial1.read());
-	}*/
+    while (!Serial1) {}
 
-	long oneSec = 1000000L;
-	Timer1.initialize(oneSec / FAST_TIMER_TICKS_IN_1SEC); // 1 sec/COEFF
-	Timer1.stop();
-	Timer1.pwm(RED_PIN, 0);
-	Timer1.pwm(YELLOW_PIN, 0);
-	Timer1.pwm(GREEN_PIN, 0);
-	Timer1.attachInterrupt(routineProcess);
-	Timer1.start();
+    // uncomment for debug module loop
+    /*for (;;) {
+    if (Serial.available())  Serial1.write(Serial.read());
+    if (Serial1.available()) Serial.write(Serial1.read());
+    }*/
 
-	SystemConfig.initFromEEPROM();
-	// on esp 
-	digitalWrite(MODULE_RESET_PIN, HIGH);
+    long oneSec = 1000000L;
+    Timer1.initialize(oneSec / FAST_TIMER_TICKS_IN_1SEC); // 1 sec/COEFF
+    Timer1.stop();
+    Timer1.pwm(RED_PIN, 0);
+    Timer1.pwm(YELLOW_PIN, 0);
+    Timer1.pwm(GREEN_PIN, 0);
+    Timer1.attachInterrupt(routineProcess);
+    Timer1.start();
+
+    SystemConfig.initFromEEPROM();
+    // on esp
+    digitalWrite(MODULE_RESET_PIN, HIGH);
+
+    SoundManager.init(soundSerial);
 }
 
 boolean isSetupMode = false;
@@ -57,16 +64,15 @@ BasicLightStrategy* lightStrategy = nullptr;
 
 void routineProcess()
 {
-	if (counter > counterLimit)
-	{
-		if (lightStrategy != nullptr)
-		{
-			lightStrategy->lighting();
-		}
-		SoundManager.performPlayAction();
-		counter = 0;
-	}
-	counter++;
+    if (counter > counterLimit)
+    {
+        if (lightStrategy != nullptr)
+        {
+            lightStrategy->lighting();
+        }
+        counter = 0;
+    }
+    counter++;
 }
 
 
@@ -89,7 +95,7 @@ void loop() {
 	{
 		input = WifiUtils.readResponce(500);// Serial1.readString();
 		input.trim();
-		//Serial.println(input); //DEBUG LOG
+                //Serial.println(input); //DEBUG LOG
 	}
 
 	if (validateInput(input))
@@ -114,7 +120,7 @@ void loop() {
 		default:
 			break;
 		}
-		Serial.print(F("\tdata:\t")); Serial.println(data);
+                Serial.print(F("\tdata:\t")); Serial.println(data);
 	}
 }
 
@@ -186,6 +192,7 @@ void updateSettings(String data)
 }
 
 /*
+- - Stop playing
 0 - Init system sound
 1 - Sound for good build
 2 - Sound for failed build
@@ -194,22 +201,8 @@ void updateSettings(String data)
 
 void playSound(String data)
 {
-	int soundNum = data.toInt();
-	switch (soundNum)
-	{
-	case 0:
-		SoundManager.playInitSound();
-		break;
-	case 1:
-		SoundManager.playGoodSound();
-		break;
-	case 2:
-		SoundManager.playBadSound();
-		break;
-	case 3:
-		SoundManager.playSoundOnSound();
-		break;
-	default:
-		break;
-	}
+    if(data.charAt(0) == '-')
+        SoundManager.stop();
+    else
+        SoundManager.play(data.toInt()+1);
 }
