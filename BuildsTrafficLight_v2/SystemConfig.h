@@ -3,16 +3,7 @@
 #ifndef _SYSTEMCONFIG_h
 #define _SYSTEMCONFIG_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
-#include <EEPROM.h>
-
-#define TRAFFIC_LIGHT_PARAMS_EEPROM_ADDR 0 // lenght 1+1+1 = 3 bytes
-#define SOUND_PARAMS_EEPROM_ADDR 3 // lenght 1 byte
-#define DEBUG_MODE_EEPROM_ADDR 3 // lenght 1 byte
+#include "BuildsTrafficLight_v2.h"
 
 #define RESP_OK F("OK")
 #define RESP_CONN_ERR F("C_ERR")
@@ -29,18 +20,19 @@ struct TrafficLightBrightness
 struct SoundParams
 {
 	byte isOn;
+	byte volume;
 };
 
 class SystemConfigClass
 {
- public:
+public:
 	void initFromEEPROM();
 
 	TrafficLightBrightness getTrafficLightBrightness();
 	void updateTrafficLightBrightness(TrafficLightBrightness newParams);
 
-	SoundParams getSoundParams();
-	void updateSoundParams(SoundParams newParams);
+	const SoundParams& getSoundParams();
+	void updateSoundParams(const SoundParams& newParams);
 
 	boolean isDebugMode();
 	void updateDebugMode(boolean isDebug);

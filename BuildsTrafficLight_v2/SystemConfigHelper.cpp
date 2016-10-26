@@ -17,9 +17,13 @@ void SystemConfigHelperClass::handleCfg(String & rawCfg)
 		{
 			handleBrightness(curParam.substring(3));
 		}
-		if (curParam.startsWith(F("sound=")))
+		else if (curParam.startsWith(F("sound=")))
 		{
 			handleSound(curParam.substring(6));
+		}
+		else if (curParam.startsWith(F("vol=")))
+		{
+			handleSoundVolume(curParam.substring(4));
 		}
 		delimInd = rawCfg.indexOf(";", startParamInd);
 	}
@@ -71,11 +75,26 @@ void SystemConfigHelperClass::handleBrightness(String params)
 
 void SystemConfigHelperClass::handleSound(String params)
 {
-	SoundParams newParams;
-	newParams.isOn = params.equalsIgnoreCase("1") ? 1 : 0;
-	if (newParams.isOn != SystemConfig.getSoundParams().isOn)
+	byte isOn = params.equalsIgnoreCase("1") ? 1 : 0;
+
+	if (isOn != SystemConfig.getSoundParams().isOn)
 	{
+		SoundParams newParams = SystemConfig.getSoundParams();
+		newParams.isOn = isOn;
 		SystemConfig.updateSoundParams(newParams);
 	}
 
+}
+
+void SystemConfigHelperClass::handleSoundVolume(String params)
+{
+	int volume = params.toInt();
+	// Sound volume from 0 to 30
+	if (volume != SystemConfig.getSoundParams().volume && volume <= 30)
+	{
+		SoundManager.setVolume(volume);
+		SoundParams newParams = SystemConfig.getSoundParams();
+		newParams.volume = volume;
+		SystemConfig.updateSoundParams(newParams);
+	}
 }

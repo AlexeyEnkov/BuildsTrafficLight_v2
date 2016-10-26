@@ -4,6 +4,8 @@
 
 #include "SystemUtils.h"
 
+SystemUtils_ SystemUtils;
+
 int SystemUtils_::freeRam() {
 	extern int __heap_start, *__brkval;
 	int v;

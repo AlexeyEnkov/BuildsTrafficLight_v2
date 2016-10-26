@@ -1,8 +1,4 @@
-#include <EEPROM.h>
-#include <TimerOne.h>
-
-#include "SoundManager.h"
-#include "RtttlPlayer.h"
+#include "EEPROM.h"
 #include "CustomLightStrategy.h"
 #include "SystemConfig.h"
 #include "WifiModuleUtils.h"
@@ -15,16 +11,28 @@
 #include "BuildsFailedAndRunningLightStrategy.h"
 #include "SystemUtils.h"
 #include "SystemConfigHelper.h"
+#include "SoftwareSerial.h"
+#include "SoundManager.h"
+
+SoftwareSerial soundSerial(SERIAL_SOUND_RX, SERIAL_SOUND_TX);
+#define Serial1 SERIAL_WIFI
 
 void setup() {
-
 	pinMode(MODULE_RESET_PIN, OUTPUT);
 	digitalWrite(MODULE_RESET_PIN, LOW);
 	//digitalWrite(MODULE_RESET_PIN, HIGH);
 
 	long serialSpeed = 115200;
+#ifndef BTL_DEBUG_NO_WIFI
 	Serial.begin(serialSpeed);
+#endif
 	//while (!Serial) {}
+
+	// Software serial can operate on 57600,
+	// but we need same as on player
+	soundSerial.begin(9600);
+	while (!soundSerial) {};
+
 	Serial1.begin(serialSpeed);
 	while (!Serial1) {}
 
@@ -43,17 +51,24 @@ void setup() {
 	Timer1.attachInterrupt(routineProcess);
 	Timer1.start();
 
-	SystemConfig.initFromEEPROM();
-	// on esp 
+	// set temporary values of sound volume
+	SoundParams sp;
+	sp.volume = 15;
+	SystemConfig.updateSoundParams(sp);
+
+	SoundManager.init(soundSerial);
+
+	// on esp
 	digitalWrite(MODULE_RESET_PIN, HIGH);
 }
-
-boolean isSetupMode = false;
 
 long counter = 0;
 long counterLimit = FAST_TIMER_TICKS_IN_1SEC / MAIN_TIMER_TICKS_IN_1SEC;
 
 BasicLightStrategy* lightStrategy = nullptr;
+
+volatile boolean needToPlaySound = false;
+volatile int soundNum = 0;
 
 void routineProcess()
 {
@@ -63,7 +78,11 @@ void routineProcess()
 		{
 			lightStrategy->lighting();
 		}
-		SoundManager.performPlayAction();
+		if (needToPlaySound)
+		{
+			needToPlaySound = false;
+			SoundManager.play(soundNum);
+		}
 		counter = 0;
 	}
 	counter++;
@@ -81,7 +100,6 @@ void routineProcess()
 
 	Command starts with $ and ends with $.First char is type of command ($<CMD><DATA>$)
 */
-
 void loop() {
 	String input;
 
@@ -148,7 +166,7 @@ boolean validateInput(String input)
 
 
 BasicLightStrategy* lightStrategies[] = {
-	0,
+	nullptr,
 	new InitSystemLightStrategy,
 	new BuildServerErrorLightStrategy,
 	new BuildServerRequestErrorLightStrategy,
@@ -174,9 +192,9 @@ void setLightStrategy(String data)
 		if (lightNum == 7)
 		{
 			String leds = data.substring(1);
-			lightStrategy->setLeds(leds.charAt(0)=='1', leds.charAt(1)=='1', leds.charAt(2)=='1');
+			lightStrategy->setLeds(leds.charAt(0) == '1', leds.charAt(1) == '1', leds.charAt(2) == '1');
 		}
-		
+
 	}
 }
 
@@ -186,6 +204,7 @@ void updateSettings(String data)
 }
 
 /*
+- - Stop playing
 0 - Init system sound
 1 - Sound for good build
 2 - Sound for failed build
@@ -194,22 +213,18 @@ void updateSettings(String data)
 
 void playSound(String data)
 {
-	int soundNum = data.toInt();
-	switch (soundNum)
+	if (data.charAt(0) == '-')
 	{
-	case 0:
-		SoundManager.playInitSound();
-		break;
-	case 1:
-		SoundManager.playGoodSound();
-		break;
-	case 2:
-		SoundManager.playBadSound();
-		break;
-	case 3:
-		SoundManager.playSoundOnSound();
-		break;
-	default:
-		break;
+		SoundManager.stop();
+	}
+	else
+	{
+		int n = data.toInt();
+		if (n >= 0)
+		{
+			needToPlaySound = true;
+			soundNum = n + 1;
+			//SoundManager.play(n + 1);
+		}
 	}
 }

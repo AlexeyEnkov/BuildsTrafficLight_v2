@@ -3,11 +3,7 @@
 #ifndef _WIFIMODULEUTILS_h
 #define _WIFIMODULEUTILS_h
 
-#if defined(ARDUINO) && ARDUINO >= 100
-	#include "arduino.h"
-#else
-	#include "WProgram.h"
-#endif
+#include "BuildsTrafficLight_v2.h"
 
 #include "SystemUtils.h"
 #include "SystemConfig.h"
@@ -34,9 +30,9 @@ public:
 	String readResponce(int timeOut = ESP_RECEIVE_RESPONCE_TIMEOUT);
 	void clearInputBuffer(int timeout = 100);
 private:
-	Stream* moduleStream = &Serial1;
+	Stream* moduleStream = &SERIAL_WIFI;
 };
 
-static WifiModuleUtils WifiUtils;
+extern WifiModuleUtils WifiUtils;
 #endif
 
