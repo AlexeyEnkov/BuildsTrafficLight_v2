@@ -4,16 +4,18 @@
 
 #include "WifiModuleUtils.h"
 
+WifiModuleUtils WifiUtils;
+
 boolean WifiModuleUtils::reset(boolean forseHardReset)
 {
 	clearInputBuffer();
 	if (!forseHardReset)
 	{
-	sendCommand(F("require(\"send_resp\")(\"OK\")"));
+		sendCommand(F("require(\"send_resp\")(\"OK\")"));
 		if (String(RESP_OK).equals(readResponce(1000)))
-	{
-		return true;
-	}
+		{
+			return true;
+		}
 		clearInputBuffer();
 	}
 	// hard reset of wifi module

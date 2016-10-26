@@ -1,4 +1,4 @@
-#include "SoundManager.h"
+#include "EEPROM.h"
 #include "CustomLightStrategy.h"
 #include "SystemConfig.h"
 #include "WifiModuleUtils.h"
@@ -11,68 +11,81 @@
 #include "BuildsFailedAndRunningLightStrategy.h"
 #include "SystemUtils.h"
 #include "SystemConfigHelper.h"
+#include "SoftwareSerial.h"
+#include "SoundManager.h"
 
 SoftwareSerial soundSerial(SERIAL_SOUND_RX, SERIAL_SOUND_TX);
 #define Serial1 SERIAL_WIFI
 
 void setup() {
-    pinMode(MODULE_RESET_PIN, OUTPUT);
-    digitalWrite(MODULE_RESET_PIN, LOW);
-    //digitalWrite(MODULE_RESET_PIN, HIGH);
+	pinMode(MODULE_RESET_PIN, OUTPUT);
+	digitalWrite(MODULE_RESET_PIN, LOW);
+	//digitalWrite(MODULE_RESET_PIN, HIGH);
 
-    long serialSpeed = 115200;
-    #ifndef BTL_DEBUG_NO_WIFI
-    Serial.begin(serialSpeed);
-    #endif
-    //while (!Serial) {}
-    Serial1.begin(serialSpeed);
+	long serialSpeed = 115200;
+#ifndef BTL_DEBUG_NO_WIFI
+	Serial.begin(serialSpeed);
+#endif
+	//while (!Serial) {}
 
-    // Software serial can operate on 57600,
-    // but we need same as on player
-    soundSerial.begin(9600);
+	// Software serial can operate on 57600,
+	// but we need same as on player
+	soundSerial.begin(9600);
+	while (!soundSerial) {};
 
-    while (!Serial1) {}
+	Serial1.begin(serialSpeed);
+	while (!Serial1) {}
 
-    // uncomment for debug module loop
-    /*for (;;) {
-    if (Serial.available())  Serial1.write(Serial.read());
-    if (Serial1.available()) Serial.write(Serial1.read());
-    }*/
+	// uncomment for debug module loop
+	/*for (;;) {
+	if (Serial.available())  Serial1.write(Serial.read());
+	if (Serial1.available()) Serial.write(Serial1.read());
+	}*/
 
-    long oneSec = 1000000L;
-    Timer1.initialize(oneSec / FAST_TIMER_TICKS_IN_1SEC); // 1 sec/COEFF
-    Timer1.stop();
-    Timer1.pwm(RED_PIN, 0);
-    Timer1.pwm(YELLOW_PIN, 0);
-    Timer1.pwm(GREEN_PIN, 0);
-    Timer1.attachInterrupt(routineProcess);
-    Timer1.start();
+	long oneSec = 1000000L;
+	Timer1.initialize(oneSec / FAST_TIMER_TICKS_IN_1SEC); // 1 sec/COEFF
+	Timer1.stop();
+	Timer1.pwm(RED_PIN, 0);
+	Timer1.pwm(YELLOW_PIN, 0);
+	Timer1.pwm(GREEN_PIN, 0);
+	Timer1.attachInterrupt(routineProcess);
+	Timer1.start();
 
-    SystemConfig.initFromEEPROM();
-    // on esp
-    digitalWrite(MODULE_RESET_PIN, HIGH);
+	// set temporary values of sound volume
+	SoundParams sp;
+	sp.volume = 15;
+	SystemConfig.updateSoundParams(sp);
 
-    SoundManager.init(soundSerial);
+	SoundManager.init(soundSerial);
+
+	// on esp
+	digitalWrite(MODULE_RESET_PIN, HIGH);
 }
-
-boolean isSetupMode = false;
 
 long counter = 0;
 long counterLimit = FAST_TIMER_TICKS_IN_1SEC / MAIN_TIMER_TICKS_IN_1SEC;
 
 BasicLightStrategy* lightStrategy = nullptr;
 
+volatile boolean needToPlaySound = false;
+volatile int soundNum = 0;
+
 void routineProcess()
 {
-    if (counter > counterLimit)
-    {
-        if (lightStrategy != nullptr)
-        {
-            lightStrategy->lighting();
-        }
-        counter = 0;
-    }
-    counter++;
+	if (counter > counterLimit)
+	{
+		if (lightStrategy != nullptr)
+		{
+			lightStrategy->lighting();
+		}
+		if (needToPlaySound)
+		{
+			needToPlaySound = false;
+			SoundManager.play(soundNum);
+		}
+		counter = 0;
+	}
+	counter++;
 }
 
 
@@ -87,7 +100,6 @@ void routineProcess()
 
 	Command starts with $ and ends with $.First char is type of command ($<CMD><DATA>$)
 */
-
 void loop() {
 	String input;
 
@@ -95,7 +107,7 @@ void loop() {
 	{
 		input = WifiUtils.readResponce(500);// Serial1.readString();
 		input.trim();
-                //Serial.println(input); //DEBUG LOG
+		//Serial.println(input); //DEBUG LOG
 	}
 
 	if (validateInput(input))
@@ -120,7 +132,7 @@ void loop() {
 		default:
 			break;
 		}
-                Serial.print(F("\tdata:\t")); Serial.println(data);
+		Serial.print(F("\tdata:\t")); Serial.println(data);
 	}
 }
 
@@ -154,7 +166,7 @@ boolean validateInput(String input)
 
 
 BasicLightStrategy* lightStrategies[] = {
-	0,
+	nullptr,
 	new InitSystemLightStrategy,
 	new BuildServerErrorLightStrategy,
 	new BuildServerRequestErrorLightStrategy,
@@ -180,9 +192,9 @@ void setLightStrategy(String data)
 		if (lightNum == 7)
 		{
 			String leds = data.substring(1);
-			lightStrategy->setLeds(leds.charAt(0)=='1', leds.charAt(1)=='1', leds.charAt(2)=='1');
+			lightStrategy->setLeds(leds.charAt(0) == '1', leds.charAt(1) == '1', leds.charAt(2) == '1');
 		}
-		
+
 	}
 }
 
@@ -201,8 +213,18 @@ void updateSettings(String data)
 
 void playSound(String data)
 {
-    if(data.charAt(0) == '-')
-        SoundManager.stop();
-    else
-        SoundManager.play(data.toInt()+1);
+	if (data.charAt(0) == '-')
+	{
+		SoundManager.stop();
+	}
+	else
+	{
+		int n = data.toInt();
+		if (n >= 0)
+		{
+			needToPlaySound = true;
+			soundNum = n + 1;
+			//SoundManager.play(n + 1);
+		}
+	}
 }

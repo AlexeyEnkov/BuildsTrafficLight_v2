@@ -5,28 +5,25 @@
 
 #include "BuildsTrafficLight_v2.h"
 
-#include <SoftwareSerial.h>
+#include "SystemConfig.h"
+#include "SoftwareSerial.h"
 
 class SoundManagerClass
 {
+
 public:
-    // play sound from 1 to 255
-    void play(uint8_t num);
+	// play sound from 1 to 2999
+	void play(int num);
 
-    void stop();
+	void stop();
 
-    void sleep();
-    void reset();
+	void sleep();
+	void reset();
 
-    void setVolume(uint8_t volume);
+	void setVolume(byte volume);
 
-    // init called after loading settings
-    void init(SoftwareSerial &theSerial);
-    void init(HardwareSerial &theSerial);
-
-    void setDebugSerial(HardwareSerial &theSerial);
-private:
-    void init();
+	// init called after loading settings
+	void init(SoftwareSerial &theSerial);
 };
 
 extern SoundManagerClass SoundManager;

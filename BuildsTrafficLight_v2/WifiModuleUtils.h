@@ -33,6 +33,6 @@ private:
 	Stream* moduleStream = &SERIAL_WIFI;
 };
 
-static WifiModuleUtils WifiUtils;
+extern WifiModuleUtils WifiUtils;
 #endif
 

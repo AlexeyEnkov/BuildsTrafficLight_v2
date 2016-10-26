@@ -65,10 +65,10 @@ end
 -- start connect to wifi
 loadScript("wifi_con")(mainStart, mainStart)
 
+loadScript("send_conf")()
 -- send initial values only if bootreason is power up and external reset
 code, reason = node.bootreason()
 if (1 == code and reason == 0 or 2 == code and reason == 6) then
-    loadScript("send_conf")()
     local s = loadScript("send_resp")
     s("L0")
     s("S0")

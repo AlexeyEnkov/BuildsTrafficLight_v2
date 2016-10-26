@@ -28,6 +28,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BuildsTrafficLight_v2.ino" />
+    <None Include="ClassDiagram.cd" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="__vm\.BuildsTrafficLight_v2.vsarduino.h">
@@ -78,6 +79,12 @@
     <ClInclude Include="CustomLightStrategy.h">
       <Filter>Header Files\lightstrategies</Filter>
     </ClInclude>
+    <ClInclude Include="BuildsTrafficLight_v2.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DFPlayer_Mini_Mp3.h">
+      <Filter>Header Files\utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BasicLightStrategy.cpp">
@@ -124,6 +131,9 @@
     </ClCompile>
     <ClCompile Include="CustomLightStrategy.cpp">
       <Filter>Source Files\lightstrategies</Filter>
+    </ClCompile>
+    <ClCompile Include="DFPlayer_Mini_Mp3.cpp">
+      <Filter>Source Files\utils</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

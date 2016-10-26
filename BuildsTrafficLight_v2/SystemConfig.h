@@ -19,20 +19,20 @@ struct TrafficLightBrightness
 
 struct SoundParams
 {
-        byte isOn;
-        byte volume;
+	byte isOn;
+	byte volume;
 };
 
 class SystemConfigClass
 {
- public:
+public:
 	void initFromEEPROM();
 
 	TrafficLightBrightness getTrafficLightBrightness();
 	void updateTrafficLightBrightness(TrafficLightBrightness newParams);
 
-        const SoundParams& getSoundParams();
-        void updateSoundParams(const SoundParams& newParams);
+	const SoundParams& getSoundParams();
+	void updateSoundParams(const SoundParams& newParams);
 
 	boolean isDebugMode();
 	void updateDebugMode(boolean isDebug);

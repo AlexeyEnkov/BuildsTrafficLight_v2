@@ -6,6 +6,8 @@
 #include "BuildsTrafficLight_v2.h"
 
 #include "SystemConfig.h"
+// we need to trigger imediate change of volume
+#include "SoundManager.h"
 
 class SystemConfigHelperClass
 {
@@ -16,9 +18,9 @@ public:
 	void handleCfg(String& rawCfg);
 
 private:
-        void handleBrightness(String && params);
-        void handleSound(String && params);
-        void handleSoundVolume(String && params);
+        void handleBrightness(String params);
+        void handleSound(String params);
+        void handleSoundVolume(String params);
 };
 
 static SystemConfigHelperClass SystemConfigHelper;

@@ -19,8 +19,8 @@
 #define YELLOW_PIN 10
 #define GREEN_PIN 9
 
-#define SERIAL_SOUND_RX 7
-#define SERIAL_SOUND_TX 8
+#define SERIAL_SOUND_RX 8
+#define SERIAL_SOUND_TX 7
 
 #define MAIN_TIMER_TICKS_IN_1SEC 20 // times is 1 sec
 #define FAST_TIMER_TICKS_IN_1SEC 500 // determine frequency of pwm (adjusted for traffic light led lamps) need 500
