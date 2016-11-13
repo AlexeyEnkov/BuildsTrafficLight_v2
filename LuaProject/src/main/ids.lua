@@ -13,36 +13,22 @@ return function(cb)
                             st = _C.R_ERR
                         end
                     else
-                        local jIds = cjson.decode(data)
+                        local newIds = {}
+                        for id in data:gmatch("\"id\":\"(.-)\"") do
+                            newIds[#newIds + 1] = id
+                        end
                         data = nil
 
-                        local newIds = {}
-                        local ind = 1;
-                        for _, v in pairs(jIds.buildType) do
-                            newIds[ind] = v.id
-                            ind = ind + 1;
-                        end
-                        jIds = nil
-
-                        file.open("ids")
-                        local notParsedIds = file.read()
-                        file.close()
-
                         local isNew = false
-                        if notParsedIds then
-                            local oldIds = cjson.decode(notParsedIds)
-                            notParsedIds = nil
-                            if #newIds == #oldIds then
-                                for i, _ in pairs(newIds) do
-                                    if newIds[i] ~= oldIds[i] then isNew = true break end
-                                end
-                            else
-                                isNew = true
+                        local oldIds = loadScript("get_ids")()
+                        if #newIds == #oldIds then
+                            for i, _ in pairs(newIds) do
+                                if newIds[i] ~= oldIds[i] then isNew = true break end
                             end
-                            oldIds = nil
                         else
                             isNew = true
                         end
+                        oldIds = nil
 
                         if isNew then
                             local idsJson = cjson.encode(newIds)
@@ -56,10 +42,11 @@ return function(cb)
                     cb(st)
                 end
 
-                local res = pcall(safe, code, data)
-                if (not res) then
-                    cb(_C.P_ERR)
-                end
+                safe(code, data)
+--                local res = pcall(safe, code, data)
+--                if (not res) then
+--                    cb(_C.P_ERR)
+--                end
             end)
     else
         cb(_C.WIFI_ERR)
